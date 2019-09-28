@@ -1,5 +1,5 @@
-#ifndef MOGE_SRC_FIXED_ARRAY_HPP_INCLUDED
-#define MOGE_SRC_FIXED_ARRAY_HPP_INCLUDED
+#ifndef MOGE_SRC_CONTAINER_FIXED_ARRAY_HPP_INCLUDED
+#define MOGE_SRC_CONTAINER_FIXED_ARRAY_HPP_INCLUDED
 
 #include <assert.h>
 #include <stdint.h>
@@ -51,4 +51,4 @@ struct FixedArray {
 
 } // namespace moge
 
-#endif // MOGE_SRC_FIXED_ARRAY_HPP_INCLUDED
+#endif // MOGE_SRC_CONTAINER_FIXED_ARRAY_HPP_INCLUDED
