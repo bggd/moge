@@ -11,11 +11,11 @@ struct LinearAllocator {
   char* end = NULL;
   char* current = NULL;
 
-  void reserve(size_t num) {
+  void reserve(size_t num_bytes) {
     assert(this->start == NULL && this->end == NULL && this->current == NULL);
-    this->start = (char*)malloc(sizeof(char) * num);
+    this->start = (char*)malloc(sizeof(char) * num_bytes);
     this->current = this->start;
-    this->end = this->start + sizeof(char) * num;
+    this->end = this->start + sizeof(char) * num_bytes;
   }
 
   void free_mem() {
