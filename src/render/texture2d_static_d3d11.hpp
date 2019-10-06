@@ -11,8 +11,7 @@ struct Texture2DStaticD3D11 {
   ID3D11Texture2D* texture = nullptr;
   ID3D11ShaderResourceView* srv = nullptr;
 
-  void create(moge::D3D11& d3d11, const void* rgba, uint32_t width,
-              uint32_t height) {
+  void create(moge::D3D11& d3d11, const void* rgba, uint32_t width, uint32_t height) {
     assert(this->texture == nullptr);
     assert(this->srv == nullptr);
 
@@ -48,8 +47,7 @@ struct Texture2DStaticD3D11 {
     srv_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     srv_desc.Texture2D.MipLevels = desc.MipLevels;
 
-    hr = d3d11.d3d_device->CreateShaderResourceView(this->texture, &srv_desc,
-                                                    &this->srv);
+    hr = d3d11.d3d_device->CreateShaderResourceView(this->texture, &srv_desc, &this->srv);
     assert(SUCCEEDED(hr));
   }
 

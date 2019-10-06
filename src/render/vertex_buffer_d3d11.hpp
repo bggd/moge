@@ -41,8 +41,7 @@ struct VertexBufferD3D11 {
     ZeroMemory(&mapped, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
     HRESULT hr;
-    hr = d3d11.d3d_device_context->Map(this->buffer, 0, D3D11_MAP_WRITE_DISCARD,
-                                       0, &mapped);
+    hr = d3d11.d3d_device_context->Map(this->buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
     assert(SUCCEEDED(hr));
     memcpy(mapped.pData, vertices, num_bytes);
     d3d11.d3d_device_context->Unmap(this->buffer, 0);

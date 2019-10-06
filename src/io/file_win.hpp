@@ -14,8 +14,7 @@ struct FileWin {
 
   void open(const char* path) {
     assert(this->handle == 0);
-    this->handle = CreateFileA(path, GENERIC_READ, 0, NULL, OPEN_EXISTING,
-                               FILE_ATTRIBUTE_NORMAL, NULL);
+    this->handle = CreateFileA(path, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     assert(this->handle != 0);
     assert(this->handle != INVALID_HANDLE_VALUE);
     this->num_bytes = this->get_file_size();
@@ -40,8 +39,7 @@ struct FileWin {
     DWORD readed_bytes;
     void* buffer = malloc(sizeof(char) * this->num_bytes + 1);
     assert(buffer);
-    BOOL b =
-        ReadFile(this->handle, buffer, this->num_bytes, &readed_bytes, NULL);
+    BOOL b = ReadFile(this->handle, buffer, this->num_bytes, &readed_bytes, NULL);
     assert(b);
     assert(this->num_bytes == readed_bytes);
     ((char*)buffer)[this->num_bytes] = '\0';
