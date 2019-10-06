@@ -1,6 +1,11 @@
----
-Language:        Cpp
-BasedOnStyle:  LLVM
-Standard: c++11
+BasedOnStyle: LLVM
+Standard: Cpp11
 PointerAlignment: Left
 ColumnLimit: 0
+AllowShortBlocksOnASingleLine: true
+#AlwaysBreakAfterReturnType: TopLevelDefinitions
+BreakBeforeBraces: Custom
+BraceWrapping:
+  #AfterFunction: true
+  BeforeCatch: true
+  BeforeElse: true
