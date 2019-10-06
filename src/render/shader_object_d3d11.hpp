@@ -17,8 +17,7 @@ struct ShaderObjectD3D11 {
   ID3D11PixelShader* ps = nullptr;
   ShaderObjectD3D11::Type type = ShaderObjectD3D11::Type::NONE;
 
-  void
-  create(moge::D3D11& d3d11, const void* code, size_t num_bytes, ShaderObjectD3D11::Type shader_type) {
+  void create(moge::D3D11& d3d11, const void* code, size_t num_bytes, ShaderObjectD3D11::Type shader_type) {
     assert(this->vs == nullptr && this->ps == nullptr && this->type == ShaderObjectD3D11::Type::NONE);
     assert(shader_type != ShaderObjectD3D11::Type::NONE);
     assert(shader_type == ShaderObjectD3D11::Type::VERTEX_SHADER || shader_type == ShaderObjectD3D11::Type::PIXEL_SHADER);
