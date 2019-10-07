@@ -96,6 +96,7 @@ struct RenderMiniMalD3D11 {
         default: assert(!"input_layout.num_float must be 1..4"); break;
       }
       d.InputSlot = 0;
+      d.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
       d.InstanceDataStepRate = 0;
     }
 
