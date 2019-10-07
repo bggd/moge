@@ -64,9 +64,9 @@ struct RenderMiniMalD3D11 {
 
     uint32_t offset = 0;
     for (int i = 0; i < num_layouts; ++i) {
-      D3D11_INPUT_ELEMENT_DESC& d = descs[i];
       assert(layouts[i].sem_name);
       assert(layouts[i].num_float != 0 && layouts[i].num_float < 5);
+      D3D11_INPUT_ELEMENT_DESC& d = descs[i];
       d.SemanticName = layouts[i].sem_name;
       d.SemanticIndex = layouts[i].sem_index;
       d.AlignedByteOffset = offset;
