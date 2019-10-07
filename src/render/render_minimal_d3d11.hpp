@@ -1,7 +1,6 @@
 #ifndef MOGE_SRC_RENDER_RENDER_MINIMAL_HPP_INCLUDED
 #define MOGE_SRC_RENDER_RENDER_MINIMAL_HPP_INCLUDED
 
-#include "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17763.0/um/d3d11.h"
 #include "d3d11.hpp"
 #include "input_layout_d3d11.hpp"
 #include "shader_object_d3d11.hpp"
