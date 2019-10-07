@@ -104,7 +104,8 @@ struct RenderMiniMalD3D11 {
     this->vb[this->vb_idx].upload(this->d3d11, vertices, num_bytes);
 
     ID3D11Buffer* buffer = this->vb[this->vb_idx].buffer;
-    this->d3d11.d3d_device_context->IASetVertexBuffers(0, 1, &buffer, &stride, 0);
+    UINT offset = 0;
+    this->d3d11.d3d_device_context->IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
     this->d3d11.d3d_device_context->IASetInputLayout(layout.input_layout);
     this->d3d11.d3d_device_context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     this->d3d11.d3d_device_context->Draw(num_bytes/stride, 0);

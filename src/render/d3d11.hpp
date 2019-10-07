@@ -44,7 +44,7 @@ struct D3D11 {
     sd.OutputWindow = this->hwnd;
     sd.SampleDesc.Count = 1;
     sd.SampleDesc.Quality = 0;
-    sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+    sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
     sd.Windowed = TRUE;
 
     const D3D_FEATURE_LEVEL lvl[7] = {
