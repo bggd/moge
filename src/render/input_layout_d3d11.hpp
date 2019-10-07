@@ -2,6 +2,7 @@
 #define MOGE_SRC_RENDER_INPUT_LAYOUT_D3D11_HPP_INCLUDED
 
 #include "d3d11.hpp"
+#include <stdint.h>
 
 namespace moge {
 
