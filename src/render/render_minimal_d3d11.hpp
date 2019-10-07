@@ -62,24 +62,23 @@ struct RenderMiniMalD3D11 {
     D3D11_INPUT_ELEMENT_DESC descs[8];
     ZeroMemory(descs, sizeof(D3D11_INPUT_ELEMENT_DESC) * 8);
 
+    uint32_t offset = 0;
     for (int i = 0; i < num_layouts; ++i) {
       D3D11_INPUT_ELEMENT_DESC& d = descs[i];
       assert(layouts[i].sem_name);
       assert(layouts[i].num_float != 0 && layouts[i].num_float < 5);
       d.SemanticName = layouts[i].sem_name;
       d.SemanticIndex = layouts[i].sem_index;
-      DXGI_FORMAT format;
-      uint32_t offset = 0;
       switch (layouts[i].num_float) {
-        case 1: format = DXGI_FORMAT_R32_FLOAT; offset += 4; break;
-        case 2: format = DXGI_FORMAT_R32G32_FLOAT; offset += 8; break;
-        case 3: format = DXGI_FORMAT_R32G32B32_FLOAT; offset += 12; break;
-        case 4: format = DXGI_FORMAT_R32G32B32A32_FLOAT; offset += 16; break;
+        case 1: d.Format = DXGI_FORMAT_R32_FLOAT; offset += 4; break;
+        case 2: d.Format = DXGI_FORMAT_R32G32_FLOAT; offset += 8; break;
+        case 3: d.Format = DXGI_FORMAT_R32G32B32_FLOAT; offset += 12; break;
+        case 4: d.Format = DXGI_FORMAT_R32G32B32A32_FLOAT; offset += 16; break;
         default: assert(!"input_layout.num_float must be 1..4"); break;
       }
-      d.Format = format;
+      if (i == 0) { d.AlignedByteOffset = 0; }
+      else { d.AlignedByteOffset = offset; }
       d.InputSlot = 0;
-      d.AlignedByteOffset = offset;
       d.InstanceDataStepRate = 0;
     }
 
