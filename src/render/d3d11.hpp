@@ -34,7 +34,7 @@ struct D3D11 {
     DXGI_SWAP_CHAIN_DESC sd;
     ZeroMemory(&sd, sizeof(DXGI_SWAP_CHAIN_DESC));
 
-    sd.BufferCount = 1;
+    sd.BufferCount = 2;
     sd.BufferDesc.Width = client_width;
     sd.BufferDesc.Height = client_height;
     sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -44,7 +44,7 @@ struct D3D11 {
     sd.OutputWindow = this->hwnd;
     sd.SampleDesc.Count = 1;
     sd.SampleDesc.Quality = 0;
-    sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+    sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
     sd.Windowed = TRUE;
 
     const D3D_FEATURE_LEVEL lvl[7] = {
@@ -90,8 +90,8 @@ struct D3D11 {
 
     D3D11_VIEWPORT vp;
     ZeroMemory(&vp, sizeof(D3D11_VIEWPORT));
-    vp.Width = client_width;
-    vp.Height = client_height;
+    vp.Width = (float)client_width;
+    vp.Height = (float)client_height;
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;

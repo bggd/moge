@@ -25,11 +25,14 @@ struct ShaderObjectD3D11 {
     HRESULT hr;
     if (shader_type == ShaderObjectD3D11::Type::VERTEX_SHADER) {
       hr = d3d11.d3d_device->CreateVertexShader(code, num_bytes, NULL, &this->vs);
+      assert(SUCCEEDED(hr));
+      this->type = shader_type;
     }
     else if (shader_type == ShaderObjectD3D11::Type::PIXEL_SHADER) {
       hr = d3d11.d3d_device->CreatePixelShader(code, num_bytes, NULL, &this->ps);
+      assert(SUCCEEDED(hr));
+      this->type = shader_type;
     }
-    assert(SUCCEEDED(hr));
   }
 
   void destroy() {

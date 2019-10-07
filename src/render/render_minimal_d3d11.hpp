@@ -24,7 +24,7 @@ struct RenderMiniMalD3D11 {
   size_t vb_num_bytes = 0;
   uint32_t vb_idx = 0;
 
-  void create(HWND hwnd, size_t vertex_buffer_numb_bytes) {
+  void create(HWND hwnd, uint32_t vertex_buffer_numb_bytes) {
     this->d3d11.init_d3d11(hwnd);
     for (auto& i : vb) {
       i.create(this->d3d11, vertex_buffer_numb_bytes);

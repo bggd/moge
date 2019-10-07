@@ -9,7 +9,7 @@ struct InputLayoutD3D11 {
 
   ID3D11InputLayout* input_layout = nullptr;
 
-  void create(moge::D3D11& d3d11, const D3D11_INPUT_ELEMENT_DESC* descs, size_t num_desc, const void* bytecode, size_t num_bytes) {
+  void create(moge::D3D11& d3d11, const D3D11_INPUT_ELEMENT_DESC* descs, uint32_t num_desc, const void* bytecode, size_t num_bytes) {
     assert(this->input_layout == nullptr);
     assert(descs);
     assert(bytecode);

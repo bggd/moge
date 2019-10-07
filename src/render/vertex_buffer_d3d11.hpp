@@ -10,7 +10,7 @@ struct VertexBufferD3D11 {
 
   ID3D11Buffer* buffer = nullptr;
 
-  void create(moge::D3D11& d3d11, size_t num_bytes) {
+  void create(moge::D3D11& d3d11, uint32_t num_bytes) {
     assert(this->buffer == nullptr);
 
     D3D11_BUFFER_DESC desc;
