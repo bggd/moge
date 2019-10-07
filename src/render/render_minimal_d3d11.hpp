@@ -94,7 +94,9 @@ struct RenderMiniMalD3D11 {
   }
 
   void draw_triangles(const void* vertices, size_t num_bytes, uint32_t stride, const moge::InputLayoutD3D11& layout) {
-    assert(num_bytes <= this->vb_num_bytes);
+    assert(vertices);
+    assert(num_bytes > 0 && num_bytes <= this->vb_num_bytes);
+    assert(stride > 0);
 
     this->vb_idx++;
     if (this->vb_idx >= MOGE_RENDER_MINIMAL_VB_ARARY_NUM) { this->vb_idx = 0; }
