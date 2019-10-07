@@ -35,7 +35,9 @@ struct Texture2DStaticD3D11 {
     init_data.SysMemPitch = width * 4;
     init_data.SysMemSlicePitch = width * height * 4;
 
-    D3D11_SUBRESOURCE_DATA ary[2] = {init_data, NULL};
+    D3D11_SUBRESOURCE_DATA ary[2];
+    ZeroMemory(&ary, sizeof(D3D11_SUBRESOURCE_DATA) * 2);
+    ary[0] = init_data;
 
     HRESULT hr;
     hr = d3d11.d3d_device->CreateTexture2D(&desc, ary, &this->texture);

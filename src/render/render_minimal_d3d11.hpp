@@ -58,8 +58,9 @@ struct RenderMiniMalD3D11 {
   }
 
   moge::InputLayoutD3D11 create_input_layout(const RenderMinimalInputLayoutD3D11* layouts, uint8_t num_layouts, const void* bytecode, size_t num_bytes) {
-    D3D11_INPUT_ELEMENT_DESC descs[num_layouts];
-    ZeroMemory(descs, sizeof(D3D11_INPUT_ELEMENT_DESC) * num_layouts);
+    assert(num_layouts <= 8);
+    D3D11_INPUT_ELEMENT_DESC descs[8];
+    ZeroMemory(descs, sizeof(D3D11_INPUT_ELEMENT_DESC) * 8);
 
     for (int i = 0; i < num_layouts; ++i) {
       D3D11_INPUT_ELEMENT_DESC& d = descs[i];
