@@ -69,6 +69,7 @@ struct RenderMiniMalD3D11 {
       assert(layouts[i].num_float != 0 && layouts[i].num_float < 5);
       d.SemanticName = layouts[i].sem_name;
       d.SemanticIndex = layouts[i].sem_index;
+      d.AlignedByteOffset = offset;
       switch (layouts[i].num_float) {
         case 1: d.Format = DXGI_FORMAT_R32_FLOAT; offset += 4; break;
         case 2: d.Format = DXGI_FORMAT_R32G32_FLOAT; offset += 8; break;
@@ -76,8 +77,6 @@ struct RenderMiniMalD3D11 {
         case 4: d.Format = DXGI_FORMAT_R32G32B32A32_FLOAT; offset += 16; break;
         default: assert(!"input_layout.num_float must be 1..4"); break;
       }
-      if (i == 0) { d.AlignedByteOffset = 0; }
-      else { d.AlignedByteOffset = offset; }
       d.InputSlot = 0;
       d.InstanceDataStepRate = 0;
     }
