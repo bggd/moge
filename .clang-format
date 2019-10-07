@@ -3,6 +3,8 @@ Standard: Cpp11
 PointerAlignment: Left
 ColumnLimit: 0
 AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+IndentCaseLabels: true
 #AlwaysBreakAfterReturnType: TopLevelDefinitions
 BreakBeforeBraces: Custom
 BraceWrapping:
