@@ -1,6 +1,7 @@
 #ifndef MOGE_SRC_RENDER_RENDER_MINIMAL_HPP_INCLUDED
 #define MOGE_SRC_RENDER_RENDER_MINIMAL_HPP_INCLUDED
 
+#include "C:/Program Files (x86)/Windows Kits/10/Include/10.0.17763.0/um/d3d11.h"
 #include "d3d11.hpp"
 #include "input_layout_d3d11.hpp"
 #include "shader_object_d3d11.hpp"
@@ -20,19 +21,37 @@ struct RenderMinimalInputLayoutD3D11 {
 struct RenderMiniMalD3D11 {
 
   moge::D3D11 d3d11;
+  ID3D11SamplerState* sampler_nearest = nullptr;
   moge::VertexBufferD3D11 vb[MOGE_RENDER_MINIMAL_VB_ARARY_NUM];
   size_t vb_num_bytes = 0;
   uint32_t vb_idx = 0;
 
   void create(HWND hwnd, uint32_t vertex_buffer_numb_bytes) {
+    assert(this->sampler_nearest == nullptr);
+
     this->d3d11.init_d3d11(hwnd);
+
     for (auto& i : vb) {
       i.create(this->d3d11, vertex_buffer_numb_bytes);
     }
     this->vb_num_bytes = vertex_buffer_numb_bytes;
+
+    D3D11_SAMPLER_DESC desc;
+    ZeroMemory(&desc, sizeof(D3D11_SAMPLER_DESC));
+    desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+    desc.AddressU = desc.AddressV = desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+    desc.MaxAnisotropy = 1;
+    desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    desc.MaxLOD = D3D11_FLOAT32_MAX;
+
+    HRESULT hr;
+    hr = this->d3d11.d3d_device->CreateSamplerState(&desc, &this->sampler_nearest);
+    assert(SUCCEEDED(hr));
   }
 
   void destroy() {
+    assert(this->sampler_nearest);
+    this->sampler_nearest->Release();
     for (auto& i : vb) {
       i.destroy();
     }
@@ -93,7 +112,7 @@ struct RenderMiniMalD3D11 {
     this->d3d11.d3d_device_context->PSSetShader(pixel_shader.ps, NULL, 0);
   }
 
-  void draw_triangles(const void* vertices, size_t num_bytes, uint32_t stride, const moge::InputLayoutD3D11& layout) {
+  void draw_triangles(const moge::Texture2DStaticD3D11& texture, const void* vertices, size_t num_bytes, uint32_t stride, const moge::InputLayoutD3D11& layout) {
     assert(vertices);
     assert(num_bytes > 0 && num_bytes <= this->vb_num_bytes);
     assert(stride > 0);
@@ -107,6 +126,10 @@ struct RenderMiniMalD3D11 {
     UINT offset = 0;
     this->d3d11.d3d_device_context->IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
     this->d3d11.d3d_device_context->IASetInputLayout(layout.input_layout);
+    ID3D11ShaderResourceView* ary_srv[2] = {texture.srv, NULL};
+    this->d3d11.d3d_device_context->PSSetShaderResources(0, 1, ary_srv);
+    ID3D11SamplerState* ary_sampler[2] = {this->sampler_nearest, NULL};
+    this->d3d11.d3d_device_context->PSSetSamplers(0, 1, ary_sampler);
     this->d3d11.d3d_device_context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     this->d3d11.d3d_device_context->Draw(num_bytes/stride, 0);
   }
