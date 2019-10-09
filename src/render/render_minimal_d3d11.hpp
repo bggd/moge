@@ -30,7 +30,7 @@ struct RenderMiniMalD3D11 {
 
     this->d3d11.init_d3d11(hwnd);
 
-    for (auto& i : vb) {
+    for (auto& i : this->vb) {
       i.create(this->d3d11, vertex_buffer_numb_bytes);
     }
     this->vb_num_bytes = vertex_buffer_numb_bytes;
