@@ -112,7 +112,7 @@ struct D3D11 {
     this->d3d_device_context->ClearRenderTargetView(this->d3d_render_target_view, col);
   }
 
-  void present() { this->d3d_swap_chain->Present(0, 0); }
+  void present() { this->d3d_swap_chain->Present(1, 0); }
 }; // struct D3D11
 } // namespace moge
 
