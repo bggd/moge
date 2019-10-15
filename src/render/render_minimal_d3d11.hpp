@@ -7,7 +7,7 @@
 #include "texture2d_static_d3d11.hpp"
 #include "vertex_buffer_d3d11.hpp"
 
-#define MOGE_RENDER_MINIMAL_VB_ARARY_NUM 2
+#define MOGE_RENDER_MINIMAL_BUFFERING_SIZE 2
 
 namespace moge {
 
@@ -21,9 +21,11 @@ struct RenderMiniMalD3D11 {
 
   moge::D3D11 d3d11;
   ID3D11SamplerState* sampler_nearest = nullptr;
-  moge::VertexBufferD3D11 vb[MOGE_RENDER_MINIMAL_VB_ARARY_NUM];
+  ID3D11Buffer* cbuffer[MOGE_RENDER_MINIMAL_BUFFERING_SIZE];
+  moge::VertexBufferD3D11 vb[MOGE_RENDER_MINIMAL_BUFFERING_SIZE];
   size_t vb_num_bytes = 0;
   uint32_t vb_idx = 0;
+  uint32_t cb_idx = 0;
 
   void create(HWND hwnd, uint32_t vertex_buffer_numb_bytes) {
     assert(this->sampler_nearest == nullptr);
@@ -35,23 +37,42 @@ struct RenderMiniMalD3D11 {
     }
     this->vb_num_bytes = vertex_buffer_numb_bytes;
 
-    D3D11_SAMPLER_DESC desc;
-    ZeroMemory(&desc, sizeof(D3D11_SAMPLER_DESC));
-    desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-    desc.AddressU = desc.AddressV = desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-    desc.MaxAnisotropy = 1;
-    desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    desc.MaxLOD = D3D11_FLOAT32_MAX;
+    D3D11_BUFFER_DESC cbd;
+    ZeroMemory(&cbd, sizeof(D3D11_BUFFER_DESC));
+    cbd.ByteWidth = sizeof(float) * 16;
+    cbd.Usage = D3D11_USAGE_DYNAMIC;
+    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    cbd.MiscFlags = 0;
+    cbd.StructureByteStride = 0;
 
     HRESULT hr;
-    hr = this->d3d11.d3d_device->CreateSamplerState(&desc, &this->sampler_nearest);
+    for (ID3D11Buffer* i : this->cbuffer) {
+      assert(i == nullptr);
+      hr = this->d3d11.d3d_device->CreateBuffer(&cbd, NULL, &i);
+      assert(SUCCEEDED(hr));
+    }
+
+    D3D11_SAMPLER_DESC sd;
+    ZeroMemory(&sd, sizeof(D3D11_SAMPLER_DESC));
+    sd.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+    sd.AddressU = sd.AddressV = sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+    sd.MaxAnisotropy = 1;
+    sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    sd.MaxLOD = D3D11_FLOAT32_MAX;
+
+    hr = this->d3d11.d3d_device->CreateSamplerState(&sd, &this->sampler_nearest);
     assert(SUCCEEDED(hr));
   }
 
   void destroy() {
     assert(this->sampler_nearest);
     this->sampler_nearest->Release();
-    for (auto& i : vb) {
+    for (ID3D11Buffer* i : this->cbuffer) {
+      assert(i);
+      i->Release();
+    }
+    for (auto& i : this->vb) {
       i.destroy();
     }
     this->d3d11.deinit_d3d11();
@@ -112,13 +133,33 @@ struct RenderMiniMalD3D11 {
     this->d3d11.d3d_device_context->PSSetShader(pixel_shader.ps, NULL, 0);
   }
 
+  void set_projection_matrix(float proj[16]) {
+    this->cb_idx++;
+    if (this->cb_idx >= MOGE_RENDER_MINIMAL_BUFFERING_SIZE) { this->cb_idx = 0; }
+
+    ID3D11Buffer* buffer = this->cbuffer[this->cb_idx];
+    assert(buffer);
+
+    D3D11_MAPPED_SUBRESOURCE mapped;
+    ZeroMemory(&mapped, sizeof(D3D11_MAPPED_SUBRESOURCE));
+
+    HRESULT hr;
+    hr = this->d3d11.d3d_device_context->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+    assert(SUCCEEDED(hr));
+    memcpy(mapped.pData, proj, sizeof(float)*16);
+    this->d3d11.d3d_device_context->Unmap(buffer, 0);
+
+    ID3D11Buffer* ary[2] = {buffer, NULL};
+    this->d3d11.d3d_device_context->VSSetConstantBuffers(0, 1, ary);
+  }
+
   void draw_triangles(const moge::Texture2DStaticD3D11& texture, const void* vertices, size_t num_bytes, uint32_t stride, const moge::InputLayoutD3D11& layout) {
     assert(vertices);
     assert(num_bytes > 0 && num_bytes <= this->vb_num_bytes);
     assert(stride > 0);
 
     this->vb_idx++;
-    if (this->vb_idx >= MOGE_RENDER_MINIMAL_VB_ARARY_NUM) { this->vb_idx = 0; }
+    if (this->vb_idx >= MOGE_RENDER_MINIMAL_BUFFERING_SIZE) { this->vb_idx = 0; }
 
     this->vb[this->vb_idx].upload(this->d3d11, vertices, num_bytes);
 
