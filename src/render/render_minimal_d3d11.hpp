@@ -32,7 +32,7 @@ struct RenderMiniMalD3D11 {
 
     this->d3d11.init_d3d11(hwnd);
 
-    for (auto& i : this->vb) {
+    for (auto&& i : this->vb) {
       i.create(this->d3d11, vertex_buffer_numb_bytes);
     }
     this->vb_num_bytes = vertex_buffer_numb_bytes;
@@ -47,10 +47,11 @@ struct RenderMiniMalD3D11 {
     cbd.StructureByteStride = 0;
 
     HRESULT hr;
-    for (ID3D11Buffer* i : this->cbuffer) {
+    for (auto&& i : this->cbuffer) {
       assert(i == nullptr);
       hr = this->d3d11.d3d_device->CreateBuffer(&cbd, NULL, &i);
       assert(SUCCEEDED(hr));
+      assert(i);
     }
 
     D3D11_SAMPLER_DESC sd;
@@ -72,7 +73,7 @@ struct RenderMiniMalD3D11 {
       assert(i);
       i->Release();
     }
-    for (auto& i : this->vb) {
+    for (auto&& i : this->vb) {
       i.destroy();
     }
     this->d3d11.deinit_d3d11();
