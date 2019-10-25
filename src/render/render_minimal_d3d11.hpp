@@ -64,6 +64,34 @@ struct RenderMiniMalD3D11 {
 
     hr = this->d3d11.d3d_device->CreateSamplerState(&sd, &this->sampler_nearest);
     assert(SUCCEEDED(hr));
+
+    D3D11_BLEND_DESC bd;
+    ZeroMemory(&bd, sizeof(D3D11_BLEND_DESC));
+    bd.AlphaToCoverageEnable = FALSE;
+    bd.IndependentBlendEnable = FALSE;
+
+    D3D11_RENDER_TARGET_BLEND_DESC rd;
+    ZeroMemory(&rd, sizeof(D3D11_RENDER_TARGET_BLEND_DESC));
+    rd.BlendEnable = TRUE;
+    rd.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    rd.DestBlend = D3D11_BLEND_ONE;
+    rd.BlendOp = D3D11_BLEND_OP_ADD;
+    rd.SrcBlendAlpha = D3D11_BLEND_ZERO;
+    rd.DestBlendAlpha = D3D11_BLEND_ONE;
+    rd.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    rd.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    bd.RenderTarget[0] = rd;
+
+    ID3D11BlendState* blend_state = nullptr;
+
+    hr = this->d3d11.d3d_device->CreateBlendState(&bd, &blend_state);
+    assert(SUCCEEDED(hr));
+
+    float factor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+    UINT mask = 0xffffffff;
+    this->d3d11.d3d_device_context->OMSetBlendState(blend_state, factor, mask);
+    blend_state->Release();
   }
 
   void destroy() {
