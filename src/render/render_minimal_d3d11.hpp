@@ -89,8 +89,7 @@ struct RenderMiniMalD3D11 {
     assert(SUCCEEDED(hr));
 
     float factor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-    UINT mask = 0xffffffff;
-    this->d3d11.d3d_device_context->OMSetBlendState(blend_state, factor, mask);
+    this->d3d11.d3d_device_context->OMSetBlendState(blend_state, factor, 0xffffffff);
     blend_state->Release();
   }
 
