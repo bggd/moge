@@ -74,10 +74,10 @@ struct RenderMiniMalD3D11 {
     ZeroMemory(&rd, sizeof(D3D11_RENDER_TARGET_BLEND_DESC));
     rd.BlendEnable = TRUE;
     rd.SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    rd.DestBlend = D3D11_BLEND_ONE;
+    rd.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
     rd.BlendOp = D3D11_BLEND_OP_ADD;
-    rd.SrcBlendAlpha = D3D11_BLEND_ZERO;
-    rd.DestBlendAlpha = D3D11_BLEND_ONE;
+    rd.SrcBlendAlpha = D3D11_BLEND_ONE;
+    rd.DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
     rd.BlendOpAlpha = D3D11_BLEND_OP_ADD;
     rd.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
