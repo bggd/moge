@@ -21,7 +21,7 @@ struct RenderMiniMalD3D11 {
 
   moge::D3D11 d3d11;
   ID3D11SamplerState* sampler_nearest = nullptr;
-  ID3D11Buffer* cbuffer[MOGE_RENDER_MINIMAL_BUFFERING_SIZE];
+  ID3D11Buffer* cbuffer[MOGE_RENDER_MINIMAL_BUFFERING_SIZE] = {};
   moge::VertexBufferD3D11 vb[MOGE_RENDER_MINIMAL_BUFFERING_SIZE];
   size_t vb_num_bytes = 0;
   uint32_t vb_idx = 0;

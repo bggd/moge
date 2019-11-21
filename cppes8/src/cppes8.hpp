@@ -1,0 +1,48 @@
+#ifndef CPPES8_SRC_CPPES8_HPP_INCLUDED
+#define CPPES8_SRC_CPPES8_HPP_INCLUDED
+
+#include "../../src/render/render_minimal_d3d11.hpp"
+#include "sdl2.hpp"
+
+namespace cppes8 {
+
+struct CPPES8 {
+  cppes8::sdl2::SDL2 sdl2;
+  moge::RenderMiniMalD3D11 render;
+};
+
+void init(CPPES8& self);
+void shutdown(CPPES8& self);
+void run(CPPES8& self, void (*on_step)(void));
+
+} // namespace cppes8
+
+void cppes8::init(cppes8::CPPES8& self) {
+  cppes8::sdl2::init(self.sdl2);
+  self.render.create(cppes8::sdl2::get_hwnd(self.sdl2), 1024 * 8);
+}
+
+void cppes8::shutdown(cppes8::CPPES8& self) {
+  self.render.destroy();
+  cppes8::sdl2::shutdown(self.sdl2);
+}
+
+void cppes8::run(cppes8::CPPES8& self, void (*on_step)(void)) {
+  assert(on_step);
+
+  auto frame = [&self, &on_step](void*) {
+    SDL_Event ev;
+    while (cppes8::sdl2::poll_event(self.sdl2, &ev)) {}
+    if (self.sdl2.has_close_request) {
+      exit(0);
+    }
+    on_step();
+  };
+
+  for (;;) {
+    frame(nullptr);
+    SDL_Delay(20);
+  }
+}
+
+#endif // CPPES8_SRC_CPPES8_HPP_INCLUDED
