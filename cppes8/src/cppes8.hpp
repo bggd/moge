@@ -2,13 +2,18 @@
 #define CPPES8_SRC_CPPES8_HPP_INCLUDED
 
 #include "../../src/render/render_minimal_d3d11.hpp"
+#include "handle.hpp"
 #include "sdl2.hpp"
+#include "shader.hpp"
+
+#define CPPES8_CONFIG_MAX_SHADERS 8
 
 namespace cppes8 {
 
 struct CPPES8 {
   cppes8::sdl2::SDL2 sdl2;
   moge::RenderMiniMalD3D11 render;
+  cppes8::handle::HandlePool<cppes8::shader::Shader, CPPES8_CONFIG_MAX_SHADERS> shaders;
 };
 
 void init(CPPES8& self);
