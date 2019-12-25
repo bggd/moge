@@ -17,6 +17,7 @@ struct Shader {
   moge::InputLayoutD3D11 input_layout;
   moge::ShaderObjectD3D11 vertex_shader;
   moge::ShaderObjectD3D11 pixel_shader;
+  uint32_t stride = 0;
 };
 
 using ShaderHandle = cppes8::handle::Handle;

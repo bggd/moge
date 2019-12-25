@@ -6,14 +6,21 @@
 #include "sdl2.hpp"
 #include "shader.hpp"
 
+#define CPPES8_CONFIG_MAX_VERTICES 49512
 #define CPPES8_CONFIG_MAX_SHADERS 8
 
 namespace cppes8 {
 
 struct CPPES8 {
+
+  struct StateGfx {
+    cppes8::shader::ShaderHandle current_shader_handle;
+  };
+
   cppes8::sdl2::SDL2 sdl2;
   moge::RenderMiniMalD3D11 render;
   cppes8::handle::HandlePool<cppes8::shader::Shader, CPPES8_CONFIG_MAX_SHADERS> shaders;
+  StateGfx state_gfx;
 };
 
 void init(CPPES8& self);
@@ -22,9 +29,11 @@ void run(CPPES8& self, void (*on_step)(void));
 
 } // namespace cppes8
 
+#include "gfx.hpp"
+
 void cppes8::init(cppes8::CPPES8& self) {
   cppes8::sdl2::init(self.sdl2);
-  self.render.create(cppes8::sdl2::get_hwnd(self.sdl2), 1024 * 8);
+  self.render.create(cppes8::sdl2::get_hwnd(self.sdl2), CPPES8_CONFIG_MAX_VERTICES);
 }
 
 void cppes8::shutdown(cppes8::CPPES8& self) {

@@ -163,7 +163,9 @@ struct RenderMiniMalD3D11 {
 
   void set_projection_matrix(float proj[16]) {
     this->cb_idx++;
-    if (this->cb_idx >= MOGE_RENDER_MINIMAL_BUFFERING_SIZE) { this->cb_idx = 0; }
+    if (this->cb_idx >= MOGE_RENDER_MINIMAL_BUFFERING_SIZE) {
+      this->cb_idx = 0;
+    }
 
     ID3D11Buffer* buffer = this->cbuffer[this->cb_idx];
     assert(buffer);
@@ -174,7 +176,7 @@ struct RenderMiniMalD3D11 {
     HRESULT hr;
     hr = this->d3d11.d3d_device_context->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
     assert(SUCCEEDED(hr));
-    memcpy(mapped.pData, proj, sizeof(float)*16);
+    memcpy(mapped.pData, proj, sizeof(float) * 16);
     this->d3d11.d3d_device_context->Unmap(buffer, 0);
 
     ID3D11Buffer* ary[2] = {buffer, NULL};
@@ -187,7 +189,9 @@ struct RenderMiniMalD3D11 {
     assert(stride > 0);
 
     this->vb_idx++;
-    if (this->vb_idx >= MOGE_RENDER_MINIMAL_BUFFERING_SIZE) { this->vb_idx = 0; }
+    if (this->vb_idx >= MOGE_RENDER_MINIMAL_BUFFERING_SIZE) {
+      this->vb_idx = 0;
+    }
 
     this->vb[this->vb_idx].upload(this->d3d11, vertices, num_bytes);
 
@@ -200,7 +204,26 @@ struct RenderMiniMalD3D11 {
     ID3D11SamplerState* ary_sampler[2] = {this->sampler_nearest, NULL};
     this->d3d11.d3d_device_context->PSSetSamplers(0, 1, ary_sampler);
     this->d3d11.d3d_device_context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    this->d3d11.d3d_device_context->Draw(num_bytes/stride, 0);
+    this->d3d11.d3d_device_context->Draw(num_bytes / stride, 0);
+  }
+  void draw_triangles_without_texture(const void* vertices, size_t num_bytes, uint32_t stride, const moge::InputLayoutD3D11& layout) {
+    assert(vertices);
+    assert(num_bytes > 0 && num_bytes <= this->vb_num_bytes);
+    assert(stride > 0);
+
+    this->vb_idx++;
+    if (this->vb_idx >= MOGE_RENDER_MINIMAL_BUFFERING_SIZE) {
+      this->vb_idx = 0;
+    }
+
+    this->vb[this->vb_idx].upload(this->d3d11, vertices, num_bytes);
+
+    ID3D11Buffer* buffer = this->vb[this->vb_idx].buffer;
+    UINT offset = 0;
+    this->d3d11.d3d_device_context->IASetVertexBuffers(0, 1, &buffer, &stride, &offset);
+    this->d3d11.d3d_device_context->IASetInputLayout(layout.input_layout);
+    this->d3d11.d3d_device_context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    this->d3d11.d3d_device_context->Draw(num_bytes / stride, 0);
   }
 
 }; // struct RenderMiniMalD3D11

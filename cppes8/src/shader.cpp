@@ -16,6 +16,10 @@ cppes8::shader::ShaderHandle cppes8::shader::create(cppes8::CPPES8& gamelib, cpp
   shader.vertex_shader = vertex_shader;
   shader.pixel_shader = pixel_shader;
 
+  for (size_t i = 0; i < shader_decl.num_array_of_input_layout; ++i) {
+    shader.stride += shader_decl.array_of_input_layout[i].num_float;
+  }
+
   return gamelib.shaders.insert(shader);
 }
 
