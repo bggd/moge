@@ -91,6 +91,20 @@ struct RenderMiniMalD3D11 {
     float factor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
     this->d3d11.d3d_device_context->OMSetBlendState(blend_state, factor, 0xffffffff);
     blend_state->Release();
+
+    D3D11_RASTERIZER_DESC rasterizer_desc;
+    ZeroMemory(&rasterizer_desc, sizeof(D3D11_RASTERIZER_DESC));
+    rasterizer_desc.FillMode = D3D11_FILL_SOLID;
+    rasterizer_desc.CullMode = D3D11_CULL_NONE;
+    rasterizer_desc.FrontCounterClockwise = TRUE;
+    rasterizer_desc.DepthClipEnable = TRUE;
+    
+    ID3D11RasterizerState* rasterizer_state = nullptr;
+    hr = this->d3d11.d3d_device->CreateRasterizerState(&rasterizer_desc, &rasterizer_state);
+    assert(SUCCEEDED(hr));
+
+    this->d3d11.d3d_device_context->RSSetState(rasterizer_state);
+    rasterizer_state->Release();
   }
 
   void destroy() {
