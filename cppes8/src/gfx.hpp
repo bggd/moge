@@ -13,6 +13,7 @@ namespace gfx {
 void clear(CPPES8& gamelib, float R, float G, float B, float A);
 void present(CPPES8& gamelib);
 void set_shader(CPPES8& gamelib, cppes8::shader::ShaderHandle handle);
+void set_projection_matrix(CPPES8& gamelib, float matrix[16]);
 void draw_triangles(CPPES8& gamelib, float* vertices, size_t num_vertex);
 
 } // namespace gfx
@@ -28,6 +29,10 @@ void cppes8::gfx::present(cppes8::CPPES8& gamelib) {
 
 void cppes8::gfx::set_shader(cppes8::CPPES8& gamelib, cppes8::shader::ShaderHandle handle) {
   gamelib.state_gfx.current_shader_handle = handle;
+}
+
+void cppes8::gfx::set_projection_matrix(cppes8::CPPES8& gamelib, float matrix[16]) {
+  gamelib.render.set_projection_matrix(matrix);
 }
 
 void cppes8::gfx::draw_triangles(cppes8::CPPES8& gamelib, float* vertices, size_t num_vertex) {
