@@ -5,9 +5,11 @@
 #include "handle.hpp"
 #include "sdl2.hpp"
 #include "shader.hpp"
+#include "texture.hpp"
 
 #define CPPES8_CONFIG_MAX_VERTICES 49512
 #define CPPES8_CONFIG_MAX_SHADERS 8
+#define CPPES8_CONFIG_MAX_TEXTURES 16
 
 namespace cppes8 {
 
@@ -15,11 +17,13 @@ struct CPPES8 {
 
   struct StateGfx {
     cppes8::shader::ShaderHandle current_shader_handle;
+    cppes8::texture::TextureHandle current_texture_handle;
   };
 
   cppes8::sdl2::SDL2 sdl2;
   moge::RenderMiniMalD3D11 render;
   cppes8::handle::HandlePool<cppes8::shader::Shader, CPPES8_CONFIG_MAX_SHADERS> shaders;
+  cppes8::handle::HandlePool<cppes8::texture::Texture, CPPES8_CONFIG_MAX_TEXTURES> textures;
   StateGfx state_gfx;
 };
 
@@ -30,6 +34,7 @@ void run(CPPES8& self, void (*on_step)(void));
 } // namespace cppes8
 
 #include "gfx.hpp"
+#include "texture.hpp"
 
 void cppes8::init(cppes8::CPPES8& self) {
   cppes8::sdl2::init(self.sdl2);
