@@ -3,7 +3,7 @@
 
 cppes8::shader::ShaderHandle cppes8::shader::create(cppes8::CPPES8& gamelib, cppes8::shader::ShaderDecl& shader_decl) {
   assert(shader_decl.array_of_input_layout);
-  assert(shader_decl.num_array_of_input_layout < 8);
+  assert(shader_decl.num_array_of_input_layout <= 8);
   assert(shader_decl.vertex_shader);
   assert(shader_decl.pixel_shader);
 
