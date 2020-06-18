@@ -9,13 +9,13 @@ struct MogeSDLFixture : ::testing::Test {
 
   moge::sdl::SDLContext sdl_ctx;
 
-  virtual void SetUp() {
+  virtual void SetUp() override {
     moge::sdl::SDLContext ctx = {};
     sdl_ctx = ctx;
     moge::sdl::createSDL(sdl_ctx);
   }
 
-  virtual void TearDown() {
+  virtual void TearDown() override {
     moge::sdl::destroySDL(sdl_ctx);
   }
 

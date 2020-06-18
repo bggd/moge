@@ -14,7 +14,9 @@ find_library(SDL2_LIBRARY
 add_library(moge-gl OBJECT
   src/macro.hpp
   src/gl/d3d11/context.hpp
-  src/gl/d3d11/context.cpp)
+  src/gl/d3d11/context.cpp
+  src/gl/d3d11/vertex_buffer.hpp
+  src/gl/d3d11/vertex_buffer.cpp)
 
 add_library(moge-sdl OBJECT
   src/macro.hpp
