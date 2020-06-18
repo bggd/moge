@@ -99,6 +99,7 @@ void moge::gl::destroyContextD3D11(moge::gl::ContextD3D11& ctx) {
   ctx.d3d_device_context->Release();
   ctx.d3d_swap_chain->Release();
   ctx.d3d_render_target_view->Release();
+
   ctx.d3d_device = NULL;
   ctx.d3d_device_context = NULL;
   ctx.d3d_swap_chain = NULL;
