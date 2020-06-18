@@ -22,7 +22,6 @@ struct MogeSDLFixture : ::testing::Test {
   HWND getHWND() {
     return moge::sdl::getHWND(sdl_ctx);
   }
-
 };
 
 #endif // MOGE_TEST_SDL_FIXTURE_HPP_INCLUDED
