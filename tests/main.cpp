@@ -3,6 +3,7 @@
 #include "gl_context.hpp"
 #include "vertex_buffer.hpp"
 #include "texture.hpp"
+#include "constant_buffer.hpp"
 
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);

@@ -18,7 +18,9 @@ add_library(moge-gl OBJECT
   src/gl/d3d11/vertex_buffer.hpp
   src/gl/d3d11/vertex_buffer.cpp
   src/gl/d3d11/texture.hpp
-  src/gl/d3d11/texture.cpp)
+  src/gl/d3d11/texture.cpp
+  src/gl/d3d11/constant_buffer.hpp
+  src/gl/d3d11/constant_buffer.cpp)
 
 add_library(moge-sdl OBJECT
   src/macro.hpp
