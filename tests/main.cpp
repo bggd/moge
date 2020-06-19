@@ -2,6 +2,7 @@
 #include "sdl.hpp"
 #include "gl_context.hpp"
 #include "vertex_buffer.hpp"
+#include "texture.hpp"
 
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);

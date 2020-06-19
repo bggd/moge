@@ -12,11 +12,13 @@ find_library(SDL2_LIBRARY
   HINTS ${MOGE_SDL2_LIB_DIR})
 
 add_library(moge-gl OBJECT
-  src/macro.hpp
+  src/trivial.hpp
   src/gl/d3d11/context.hpp
   src/gl/d3d11/context.cpp
   src/gl/d3d11/vertex_buffer.hpp
-  src/gl/d3d11/vertex_buffer.cpp)
+  src/gl/d3d11/vertex_buffer.cpp
+  src/gl/d3d11/texture.hpp
+  src/gl/d3d11/texture.cpp)
 
 add_library(moge-sdl OBJECT
   src/macro.hpp
