@@ -4,6 +4,7 @@ void moge::gl::createShaderD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3
   MOGE_ASSERT(!shdr.input_layour_refptr);
   MOGE_ASSERT(!shdr.vs_id);
   MOGE_ASSERT(!shdr.ps_id);
+  MOGE_ASSERT(!shdr.stride);
 
   MOGE_ASSERT(decl.input_ary);
   MOGE_ASSERT(decl.num_input);
@@ -42,6 +43,8 @@ void moge::gl::createShaderD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3
     d.InstanceDataStepRate = 0;
   }
 
+  shdr.stride = offset;
+
   HRESULT hr;
   hr = ctx.d3d_device->CreateInputLayout(descs, decl.num_input, decl.vertex_shader, decl.num_byte_of_vertex_shader, &shdr.input_layour_refptr);
   MOGE_ASSERT(SUCCEEDED(hr));
@@ -57,6 +60,7 @@ void moge::gl::destroyShaderD3D11(moge::gl::ShaderD3D11& shdr) {
   MOGE_ASSERT(shdr.input_layour_refptr);
   MOGE_ASSERT(shdr.vs_id);
   MOGE_ASSERT(shdr.ps_id);
+  MOGE_ASSERT(shdr.stride);
 
   shdr.input_layour_refptr->Release();
   shdr.vs_id->Release();
@@ -65,4 +69,5 @@ void moge::gl::destroyShaderD3D11(moge::gl::ShaderD3D11& shdr) {
   shdr.input_layour_refptr = NULL;
   shdr.vs_id = NULL;
   shdr.ps_id = NULL;
+  shdr.stride = 0;
 }
