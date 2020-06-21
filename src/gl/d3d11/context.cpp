@@ -1,6 +1,7 @@
 #include "context.hpp"
 
 #include <limits.h>
+#include <stdlib.h>
 
 #include "../../macro.hpp"
 
@@ -54,9 +55,14 @@ void moge::gl::createContextD3D11(moge::gl::ContextD3D11& ctx) {
   device_flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
+  D3D_DRIVER_TYPE driver_type = D3D_DRIVER_TYPE_HARDWARE;
+#if defined(MOGE_DEBUG)
+  driver_type = D3D_DRIVER_TYPE_WARP;
+#endif
+
   HRESULT hr = D3D11CreateDeviceAndSwapChain(
       NULL,
-      D3D_DRIVER_TYPE_HARDWARE,
+      driver_type,
       NULL,
       device_flags,
       lvl,
