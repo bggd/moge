@@ -1,14 +1,63 @@
 #include "context.hpp"
 
-#include <limits.h>
-#include <stdlib.h>
-
-#include "../../macro.hpp"
+#include "../../trivial.hpp"
 
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "winmm.lib")
+
+namespace moge {
+namespace gl {
+namespace detail {
+
+void setDefaults(ContextD3D11& ctx) {
+  D3D11_BLEND_DESC bd;
+  ZeroMemory(&bd, sizeof(D3D11_BLEND_DESC));
+  bd.AlphaToCoverageEnable = FALSE;
+  bd.IndependentBlendEnable = FALSE;
+
+  D3D11_RENDER_TARGET_BLEND_DESC rtd;
+  ZeroMemory(&rtd, sizeof(D3D11_RENDER_TARGET_BLEND_DESC));
+  rtd.BlendEnable = TRUE;
+  rtd.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+  rtd.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+  rtd.BlendOp = D3D11_BLEND_OP_ADD;
+  rtd.SrcBlendAlpha = D3D11_BLEND_ONE;
+  rtd.DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+  rtd.BlendOpAlpha = D3D11_BLEND_OP_ADD;
+  rtd.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+  bd.RenderTarget[0] = rtd;
+
+  ID3D11BlendState* blend_state = NULL;
+
+  HRESULT hr;
+  hr = ctx.d3d_device->CreateBlendState(&bd, &blend_state);
+  MOGE_ASSERT(SUCCEEDED(hr));
+
+  float factor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+  ctx.d3d_device_context->OMSetBlendState(blend_state, factor, 0xffffffff);
+  blend_state->Release();
+
+  D3D11_RASTERIZER_DESC rd;
+  ZeroMemory(&rd, sizeof(D3D11_RASTERIZER_DESC));
+  rd.FillMode = D3D11_FILL_SOLID;
+  rd.CullMode = D3D11_CULL_NONE;
+  rd.FrontCounterClockwise = TRUE;
+  rd.DepthClipEnable = TRUE;
+
+  ID3D11RasterizerState* rasterizer_state = NULL;
+  hr = ctx.d3d_device->CreateRasterizerState(&rd, &rasterizer_state);
+  MOGE_ASSERT(SUCCEEDED(hr));
+  rasterizer_state->Release();
+
+  ctx.d3d_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+} // namespace detail
+} // namespace gl
+} // namespace moge
 
 void moge::gl::createContextD3D11(moge::gl::ContextD3D11& ctx) {
   MOGE_ASSERT(ctx.hwnd);
@@ -95,6 +144,8 @@ void moge::gl::createContextD3D11(moge::gl::ContextD3D11& ctx) {
   vp.TopLeftX = 0;
   vp.TopLeftY = 0;
   ctx.d3d_device_context->RSSetViewports(1, &vp);
+
+  moge::gl::detail::setDefaults(ctx);
 }
 
 void moge::gl::destroyContextD3D11(moge::gl::ContextD3D11& ctx) {
