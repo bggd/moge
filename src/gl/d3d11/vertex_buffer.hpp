@@ -9,6 +9,7 @@ namespace gl {
 
 struct VertexBufferD3D11 {
   ID3D11Buffer* buffer_id;
+  uint32_t num_bytes;
 };
 
 void createVertexBufferD3D11(ContextD3D11& ctx, VertexBufferD3D11& vbo, uint32_t num_bytes);

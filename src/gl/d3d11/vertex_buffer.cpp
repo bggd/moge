@@ -2,6 +2,7 @@
 
 void moge::gl::createVertexBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::VertexBufferD3D11& vbo, uint32_t num_bytes) {
   MOGE_ASSERT(!vbo.buffer_id);
+  MOGE_ASSERT(!vbo.num_bytes);
 
   D3D11_BUFFER_DESC bd;
   ZeroMemory(&bd, sizeof(D3D11_BUFFER_DESC));
@@ -15,17 +16,21 @@ void moge::gl::createVertexBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Ve
   HRESULT hr;
   hr = ctx.d3d_device->CreateBuffer(&bd, NULL, &vbo.buffer_id);
   MOGE_ASSERT(SUCCEEDED(hr));
+
+  vbo.num_bytes = num_bytes;
 }
 
 void moge::gl::destroyVertexBufferD3D11(moge::gl::VertexBufferD3D11& vbo) {
   MOGE_ASSERT(vbo.buffer_id);
   vbo.buffer_id->Release();
   vbo.buffer_id = NULL;
+  vbo.num_bytes = 0;
 }
 
 void moge::gl::uploadVertexBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::VertexBufferD3D11& vbo, const void* vertices, size_t num_bytes) {
   MOGE_ASSERT(vbo.buffer_id);
   MOGE_ASSERT(vertices);
+  MOGE_ASSERT(num_bytes <= vbo.num_bytes);
 
   D3D11_MAPPED_SUBRESOURCE mapped;
   ZeroMemory(&mapped, sizeof(D3D11_MAPPED_SUBRESOURCE));

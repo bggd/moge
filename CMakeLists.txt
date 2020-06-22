@@ -22,7 +22,9 @@ add_library(moge-gl OBJECT
   src/gl/d3d11/constant_buffer.hpp
   src/gl/d3d11/constant_buffer.cpp
   src/gl/d3d11/shader.hpp
-  src/gl/d3d11/shader.cpp)
+  src/gl/d3d11/shader.cpp
+  src/gl/d3d11/gl.hpp
+  src/gl/d3d11/gl.cpp)
 
 add_library(moge-sdl OBJECT
   src/macro.hpp

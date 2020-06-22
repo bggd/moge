@@ -17,7 +17,9 @@ struct ContextD3D11 {
   IDXGISwapChain* d3d_swap_chain;
   ID3D11RenderTargetView* d3d_render_target_view;
 
+  // current states
   uint32_t stride_from_shader;
+  uint32_t num_byte_of_vbo;
 };
 
 void createContextD3D11(ContextD3D11& ctx);
