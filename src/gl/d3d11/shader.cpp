@@ -32,7 +32,7 @@ void moge::gl::createShaderD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3
     uint8_t slot = decl.input_ary[i].slot;
     MOGE_ASSERT(slot < MOGE_GL_VERTEX_BUFFER_SLOT_MAX);
     MOGE_ASSERT(slot == last_slot || slot == (last_slot + 1));
-    d.AlignedByteOffset = (slot == last_slot)? D3D11_APPEND_ALIGNED_ELEMENT : 0;
+    d.AlignedByteOffset = (slot == last_slot) ? D3D11_APPEND_ALIGNED_ELEMENT : 0;
     d.InputSlot = slot;
     d.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
     d.InstanceDataStepRate = 0;
