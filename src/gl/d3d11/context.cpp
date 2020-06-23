@@ -62,8 +62,10 @@ void setDefaults(ContextD3D11& ctx) {
 void moge::gl::createContextD3D11(moge::gl::ContextD3D11& ctx) {
   MOGE_ASSERT(ctx.hwnd);
   MOGE_ASSERT(!ctx.d3d_device && !ctx.d3d_device_context && !ctx.d3d_swap_chain && !ctx.d3d_render_target_view);
-  MOGE_ASSERT(!ctx.stride_from_shader);
-  MOGE_ASSERT(!ctx.num_byte_of_vbo);
+  for (uint32_t i = 0; i < MOGE_GL_VERTEX_BUFFER_SLOT_MAX; ++i) {
+    MOGE_ASSERT(!ctx.stride_from_shader[i]);
+    MOGE_ASSERT(!ctx.num_byte_of_vbo[i]);
+  }
 
   RECT client_rect;
   BOOL ok = GetClientRect(ctx.hwnd, &client_rect);
@@ -164,6 +166,8 @@ void moge::gl::destroyContextD3D11(moge::gl::ContextD3D11& ctx) {
   ctx.d3d_swap_chain = NULL;
   ctx.d3d_render_target_view = NULL;
 
-  ctx.stride_from_shader = 0;
-  ctx.num_byte_of_vbo = 0;
+  for (uint32_t i = 0; i < MOGE_GL_VERTEX_BUFFER_SLOT_MAX; ++i) {
+    ctx.stride_from_shader[i] = 0;
+    ctx.num_byte_of_vbo[i] = 0;
+  }
 }

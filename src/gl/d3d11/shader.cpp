@@ -4,7 +4,9 @@ void moge::gl::createShaderD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3
   MOGE_ASSERT(!shdr.input_layour_refptr);
   MOGE_ASSERT(!shdr.vs_id);
   MOGE_ASSERT(!shdr.ps_id);
-  MOGE_ASSERT(!shdr.stride);
+  for (uint32_t i = 0; i < MOGE_GL_VERTEX_BUFFER_SLOT_MAX; ++i) {
+    MOGE_ASSERT(!shdr.stride[i]);
+  }
 
   MOGE_ASSERT(decl.input_ary);
   MOGE_ASSERT(decl.num_input);
@@ -17,7 +19,7 @@ void moge::gl::createShaderD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3
   D3D11_INPUT_ELEMENT_DESC descs[MOGE_GL_INPUT_ELEMENT_MAX];
   ZeroMemory(descs, sizeof(D3D11_INPUT_ELEMENT_DESC) * MOGE_GL_INPUT_ELEMENT_MAX);
 
-  uint32_t offset = 0;
+  int32_t last_slot = -1;
   for (uint32_t i = 0; i < decl.num_input; ++i) {
     MOGE_ASSERT(decl.input_ary[i].semantic_name);
     MOGE_ASSERT(decl.input_ary[i].num_float > 0);
@@ -26,7 +28,16 @@ void moge::gl::createShaderD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3
     D3D11_INPUT_ELEMENT_DESC& d = descs[i];
     d.SemanticName = decl.input_ary[i].semantic_name;
     d.SemanticIndex = decl.input_ary[i].semantic_index;
-    d.AlignedByteOffset += offset;
+
+    uint8_t slot = decl.input_ary[i].slot;
+    MOGE_ASSERT(slot < MOGE_GL_VERTEX_BUFFER_SLOT_MAX);
+    MOGE_ASSERT(slot == last_slot || slot == (last_slot + 1));
+    d.AlignedByteOffset = (slot == last_slot)? D3D11_APPEND_ALIGNED_ELEMENT : 0;
+    d.InputSlot = slot;
+    d.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+    d.InstanceDataStepRate = 0;
+
+    uint32_t& offset = shdr.stride[slot];
 
     // clang-format off
     switch (decl.input_ary[i].num_float) {
@@ -38,12 +49,8 @@ void moge::gl::createShaderD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3
     }
     // clang-format on
 
-    d.InputSlot = 0;
-    d.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-    d.InstanceDataStepRate = 0;
+    last_slot = slot;
   }
-
-  shdr.stride = offset;
 
   HRESULT hr;
   hr = ctx.d3d_device->CreateInputLayout(descs, decl.num_input, decl.vertex_shader, decl.num_byte_of_vertex_shader, &shdr.input_layour_refptr);
@@ -60,7 +67,6 @@ void moge::gl::destroyShaderD3D11(moge::gl::ShaderD3D11& shdr) {
   MOGE_ASSERT(shdr.input_layour_refptr);
   MOGE_ASSERT(shdr.vs_id);
   MOGE_ASSERT(shdr.ps_id);
-  MOGE_ASSERT(shdr.stride);
 
   shdr.input_layour_refptr->Release();
   shdr.vs_id->Release();
@@ -69,5 +75,7 @@ void moge::gl::destroyShaderD3D11(moge::gl::ShaderD3D11& shdr) {
   shdr.input_layour_refptr = NULL;
   shdr.vs_id = NULL;
   shdr.ps_id = NULL;
-  shdr.stride = 0;
+  for (uint32_t i = 0; i < MOGE_GL_VERTEX_BUFFER_SLOT_MAX; ++i) {
+    shdr.stride[i] = 0;
+  }
 }

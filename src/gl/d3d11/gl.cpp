@@ -13,7 +13,9 @@ void moge::gl::setShaderD3D11(ContextD3D11& ctx, ShaderD3D11& shdr) {
   ctx.d3d_device_context->VSSetShader(shdr.vs_id, NULL, 0);
   ctx.d3d_device_context->PSSetShader(shdr.ps_id, NULL, 0);
   ctx.d3d_device_context->IASetInputLayout(shdr.input_layour_refptr);
-  ctx.stride_from_shader = shdr.stride;
+  for (uint32_t i = 0; i < MOGE_GL_VERTEX_BUFFER_SLOT_MAX; ++i) {
+    ctx.stride_from_shader[i] = shdr.stride[i];
+  }
 }
 
 void moge::gl::setConstantBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ConstantBufferD3D11& cb) {
@@ -26,17 +28,22 @@ void moge::gl::setTextureD3D11(moge::gl::ContextD3D11& ctx, moge::gl::TextureD3D
   ctx.d3d_device_context->PSSetShaderResources(0, 1, srv_ary);
 }
 
-void moge::gl::setVertexBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::VertexBufferD3D11& vbo) {
-  MOGE_ASSERT(ctx.stride_from_shader);
+void moge::gl::setVertexBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::VertexBufferD3D11& vbo, uint8_t slot) {
+  MOGE_ASSERT(slot < MOGE_GL_VERTEX_BUFFER_SLOT_MAX);
+  MOGE_ASSERT(ctx.stride_from_shader[slot]);
 
   const UINT offset = 0;
-  const UINT stride = sizeof(float) * ctx.stride_from_shader;
-  ctx.d3d_device_context->IASetVertexBuffers(0, 1, &vbo.buffer_id, &stride, &offset);
+  const UINT stride = sizeof(float) * ctx.stride_from_shader[slot];
+  ctx.d3d_device_context->IASetVertexBuffers(slot, 1, &vbo.buffer_id, &stride, &offset);
 
-  ctx.num_byte_of_vbo = vbo.num_bytes;
+  ctx.num_byte_of_vbo[slot] = vbo.num_bytes;
 }
 
 void moge::gl::drawD3D11(moge::gl::ContextD3D11& ctx, uint32_t count, uint16_t offset) {
-  MOGE_ASSERT((count + offset) <= (sizeof(float) * ctx.num_byte_of_vbo));
+  for (uint32_t i = 0; i < MOGE_GL_VERTEX_BUFFER_SLOT_MAX; ++i) {
+    if (ctx.stride_from_shader[i]) {
+      MOGE_ASSERT((count + offset) <= (sizeof(float) * ctx.num_byte_of_vbo[i]));
+    }
+  }
   ctx.d3d_device_context->Draw(count, offset);
 }

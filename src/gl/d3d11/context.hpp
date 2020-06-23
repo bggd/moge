@@ -5,7 +5,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#include "../../trivial.hpp"
+#include "../gl.hpp"
 
 namespace moge {
 namespace gl {
@@ -18,8 +18,8 @@ struct ContextD3D11 {
   ID3D11RenderTargetView* d3d_render_target_view;
 
   // current states
-  uint32_t stride_from_shader;
-  uint32_t num_byte_of_vbo;
+  uint32_t stride_from_shader[MOGE_GL_VERTEX_BUFFER_SLOT_MAX];
+  uint32_t num_byte_of_vbo[MOGE_GL_VERTEX_BUFFER_SLOT_MAX];
 };
 
 void createContextD3D11(ContextD3D11& ctx);
