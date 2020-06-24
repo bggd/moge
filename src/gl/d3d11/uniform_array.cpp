@@ -1,7 +1,8 @@
-#include "constant_buffer.hpp"
+#include "uniform_array.hpp"
 
-void moge::gl::createConstantBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ConstantBufferD3D11& cb, uint32_t num_float) {
+void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::UniformArrayD3D11& cb, enum MOGE_GL_SHADER_STAGE stage, uint32_t num_float) {
   MOGE_ASSERT(!cb.buffer_id);
+  MOGE_ASSERT(!cb.shader_stage);
   MOGE_ASSERT(num_float);
 
   D3D11_BUFFER_DESC cbd;
@@ -16,15 +17,19 @@ void moge::gl::createConstantBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::
   HRESULT hr;
   hr = ctx.d3d_device->CreateBuffer(&cbd, NULL, &cb.buffer_id);
   MOGE_ASSERT(SUCCEEDED(hr));
+
+  cb.shader_stage = stage;
 }
 
-void moge::gl::destroyConstantBufferD3D11(moge::gl::ConstantBufferD3D11& cb) {
+void moge::gl::destroyUniformArrayD3D11(moge::gl::UniformArrayD3D11& cb) {
   MOGE_ASSERT(cb.buffer_id);
+  MOGE_ASSERT(cb.shader_stage);
   cb.buffer_id->Release();
   cb.buffer_id = NULL;
+  cb.shader_stage = MOGE_GL_SHADER_STAGE_UNDEFINED;
 }
 
-void moge::gl::uploadConstantBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ConstantBufferD3D11& cb, float* data, uint32_t num_float) {
+void moge::gl::uploadUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::UniformArrayD3D11& cb, float* data, uint32_t num_float) {
   MOGE_ASSERT(cb.buffer_id);
 
   D3D11_MAPPED_SUBRESOURCE mapped;

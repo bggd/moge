@@ -16,9 +16,18 @@ void moge::gl::setShaderD3D11(ContextD3D11& ctx, ShaderD3D11& shdr) {
   ctx.stride_from_shader = shdr.stride;
 }
 
-void moge::gl::setConstantBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ConstantBufferD3D11& cb) {
+void moge::gl::setUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::UniformArrayD3D11& cb) {
+  MOGE_ASSERT(cb.buffer_id);
+  MOGE_ASSERT(cb.shader_stage);
+
   ID3D11Buffer* ary[2] = {cb.buffer_id, NULL};
-  ctx.d3d_device_context->VSSetConstantBuffers(0, 1, ary);
+
+  if (cb.shader_stage == MOGE_GL_SHADER_STAGE_VERTEX) {
+    ctx.d3d_device_context->VSSetConstantBuffers(0, 1, ary);
+  }
+  else {
+    ctx.d3d_device_context->PSSetConstantBuffers(0, 1, ary);
+  }
 }
 
 void moge::gl::setTextureD3D11(moge::gl::ContextD3D11& ctx, moge::gl::TextureD3D11& tex) {

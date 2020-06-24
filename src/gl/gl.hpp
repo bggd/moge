@@ -7,6 +7,12 @@
 #define MOGE_GL_INPUT_ELEMENT_MAX (8)
 #endif
 
+enum MOGE_GL_SHADER_STAGE {
+  MOGE_GL_SHADER_STAGE_UNDEFINED = 0,
+  MOGE_GL_SHADER_STAGE_VERTEX,
+  MOGE_GL_SHADER_STAGE_PIXEL
+};
+
 namespace moge {
 namespace gl {
 
