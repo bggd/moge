@@ -37,6 +37,6 @@ void moge::gl::setVertexBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Verte
 }
 
 void moge::gl::drawD3D11(moge::gl::ContextD3D11& ctx, uint32_t count, uint16_t offset) {
-  MOGE_ASSERT((count + offset) <= (sizeof(float) * ctx.num_byte_of_vbo));
+  MOGE_ASSERT(((count + offset) * sizeof(float)) <= ctx.num_byte_of_vbo);
   ctx.d3d_device_context->Draw(count, offset);
 }
