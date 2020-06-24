@@ -11,7 +11,7 @@ struct ShaderD3D11 {
   ID3D11InputLayout* input_layour_refptr;
   ID3D11VertexShader* vs_id;
   ID3D11PixelShader* ps_id;
-  uint32_t stride[MOGE_GL_VERTEX_BUFFER_SLOT_MAX];
+  uint32_t stride;
 };
 
 void createShaderD3D11(ContextD3D11& ctx, ShaderD3D11& shdr, ShaderDecl& decl);
