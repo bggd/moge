@@ -5,9 +5,17 @@ void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Un
   MOGE_ASSERT(!cb.shader_stage);
   MOGE_ASSERT(num_float);
 
+  UINT bytewidth = sizeof(float) * num_float;
+  if (bytewidth < 16) {
+    bytewidth += 16 - bytewidth;
+  }
+  else {
+    bytewidth += bytewidth % 16;
+  }
+
   D3D11_BUFFER_DESC cbd;
   ZeroMemory(&cbd, sizeof(D3D11_BUFFER_DESC));
-  cbd.ByteWidth = sizeof(float) * num_float;
+  cbd.ByteWidth = bytewidth;
   cbd.Usage = D3D11_USAGE_DYNAMIC;
   cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
   cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
