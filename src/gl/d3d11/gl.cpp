@@ -39,13 +39,14 @@ void moge::gl::setVertexBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Verte
   MOGE_ASSERT(ctx.stride_from_shader);
 
   const UINT offset = 0;
-  const UINT stride = sizeof(float) * ctx.stride_from_shader;
+  const UINT stride = ctx.stride_from_shader;
   ctx.d3d_device_context->IASetVertexBuffers(0, 1, &vbo.buffer_id, &stride, &offset);
 
   ctx.num_byte_of_vbo = vbo.num_bytes;
 }
 
 void moge::gl::drawD3D11(moge::gl::ContextD3D11& ctx, uint32_t count, uint16_t offset) {
-  MOGE_ASSERT(((count + offset) * sizeof(float)) <= ctx.num_byte_of_vbo);
-  ctx.d3d_device_context->Draw(count, offset);
+  const UINT stride = ctx.stride_from_shader;
+  MOGE_ASSERT(((count + offset) * stride) <= ctx.num_byte_of_vbo);
+  ctx.d3d_device_context->Draw(count * stride, offset * stride);
 }
