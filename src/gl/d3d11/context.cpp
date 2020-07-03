@@ -167,3 +167,39 @@ void moge::gl::destroyContextD3D11(moge::gl::ContextD3D11& ctx) {
   ctx.stride_from_shader = 0;
   ctx.num_byte_of_vbo = 0;
 }
+
+void moge::gl::resizeBackBufferD3D11(moge::gl::ContextD3D11& ctx) {
+  ctx.d3d_render_target_view->Release();
+  ctx.d3d_render_target_view = NULL;
+
+  HRESULT hr;
+  hr = ctx.d3d_swap_chain->ResizeBuffers(2, 0, 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
+  MOGE_ASSERT(SUCCEEDED(hr));
+
+  ID3D11Texture2D* backbuffer;
+  hr = ctx.d3d_swap_chain->GetBuffer(0, IID_PPV_ARGS(&backbuffer));
+  MOGE_ASSERT(SUCCEEDED(hr));
+
+  hr = ctx.d3d_device->CreateRenderTargetView(backbuffer, NULL, &ctx.d3d_render_target_view);
+  MOGE_ASSERT(SUCCEEDED(hr));
+  backbuffer->Release();
+
+  ctx.d3d_device_context->OMSetRenderTargets(1, &ctx.d3d_render_target_view, NULL);
+
+  RECT client_rect;
+  BOOL ok = GetClientRect(ctx.hwnd, &client_rect);
+  MOGE_ASSERT(ok);
+
+  LONG client_width = client_rect.right - client_rect.left;
+  LONG client_height = client_rect.bottom - client_rect.top;
+
+  D3D11_VIEWPORT vp;
+  ZeroMemory(&vp, sizeof(D3D11_VIEWPORT));
+  vp.Width = static_cast<float>(client_width);
+  vp.Height = static_cast<float>(client_height);
+  vp.MinDepth = 0.0f;
+  vp.MaxDepth = 1.0f;
+  vp.TopLeftX = 0;
+  vp.TopLeftY = 0;
+  ctx.d3d_device_context->RSSetViewports(1, &vp);
+}

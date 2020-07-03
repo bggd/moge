@@ -24,6 +24,7 @@ struct ContextD3D11 {
 
 void createContextD3D11(ContextD3D11& ctx);
 void destroyContextD3D11(ContextD3D11& ctx);
+void resizeBackBufferD3D11(ContextD3D11& ctx);
 
 } // namespace gl
 } // namespace moge
