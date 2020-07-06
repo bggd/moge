@@ -18,7 +18,7 @@ static bool moge_gl_load_ogl_vao(MogeGLGetFunc getproc) {
   return true;
 }
 
-void moge_gl_load_opengl_functions(MogeGLGetFunc getproc) {
+void moge::gl::load_opengl_functions(MogeGLGetFunc getproc) {
   bool ok;
   ok = moge_gl_load_ogl_gles2(getproc);
   MOGE_ASSERT(ok);
