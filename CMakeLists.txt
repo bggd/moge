@@ -11,20 +11,16 @@ find_library(SDL2_LIBRARY
   NAMES SDL2.lib SDL2main.lib
   HINTS ${MOGE_SDL2_LIB_DIR})
 
-add_library(moge-gl OBJECT
-  src/trivial.hpp
-  src/gl/d3d11/context.hpp
+add_library(moge-gl-d3d11 OBJECT
   src/gl/d3d11/context.cpp
-  src/gl/d3d11/vertex_buffer.hpp
   src/gl/d3d11/vertex_buffer.cpp
-  src/gl/d3d11/texture.hpp
   src/gl/d3d11/texture.cpp
-  src/gl/d3d11/uniform_array.hpp
   src/gl/d3d11/uniform_array.cpp
-  src/gl/d3d11/shader.hpp
   src/gl/d3d11/shader.cpp
-  src/gl/d3d11/gl.hpp
   src/gl/d3d11/gl.cpp)
+
+add_library(moge-gl-ogl OBJECT
+  src/gl/ogl/bind.cpp)
 
 add_library(moge-sdl OBJECT
   src/macro.hpp
@@ -34,7 +30,7 @@ target_include_directories(moge-sdl PRIVATE
   ${MOGE_SDL2_INC_DIR})
 
 add_library(moge
-  $<TARGET_OBJECTS:moge-gl>
+  $<TARGET_OBJECTS:moge-gl-d3d11>
   $<TARGET_OBJECTS:moge-sdl>)
 target_link_libraries(moge PRIVATE ${SDL2_LIBRARY})
 
