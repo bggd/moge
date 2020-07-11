@@ -77,7 +77,7 @@ typedef double GLdouble;
   MOGE_OGL_DEF(void, TexParameteri, GLenum, GLenum, GLint)                                                     \
   MOGE_OGL_DEF(void, TexImage2D, GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid*) \
   MOGE_OGL_DEF(void, DeleteTextures, GLsizei, const GLuint*)                                                   \
-  MOGE_OGL_DEF(void, GenBuffers, GLenum, GLuint*)                                                              \
+  MOGE_OGL_DEF(void, GenBuffers, GLsizei, GLuint*)                                                              \
   MOGE_OGL_DEF(void, BindBuffer, GLenum, GLuint)                                                               \
   MOGE_OGL_DEF(GLboolean, IsBuffer, GLuint)                                                                    \
   MOGE_OGL_DEF(void, BufferData, GLenum, GLsizeiptr size, const GLvoid*, GLenum)                               \
