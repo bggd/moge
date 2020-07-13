@@ -20,7 +20,13 @@ add_library(moge-gl-d3d11 OBJECT
   src/gl/d3d11/gl.cpp)
 
 add_library(moge-gl-ogl OBJECT
-  src/gl/ogl/bind.cpp)
+  src/gl/ogl/bind.cpp
+  src/gl/ogl/context.cpp
+  src/gl/ogl/vertex_buffer.cpp
+  src/gl/ogl/texture.cpp
+  src/gl/ogl/uniform_array.cpp
+  src/gl/ogl/shader.cpp
+  src/gl/ogl/gl.cpp)
 
 add_library(moge-sdl OBJECT
   src/macro.hpp

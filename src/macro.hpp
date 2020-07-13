@@ -14,3 +14,4 @@
   #endif
 #define MOGE_ASSERT(c) assert(c)
 #endif // MOGE_ASSERT
+

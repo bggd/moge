@@ -10,11 +10,12 @@ namespace gl {
 struct UniformArrayD3D11 {
   ID3D11Buffer* buffer_id;
   enum MOGE_GL_SHADER_STAGE shader_stage;
+  uint32_t num_element;
 };
 
-void createUniformArrayD3D11(ContextD3D11& ctx, UniformArrayD3D11& cb, enum MOGE_GL_SHADER_STAGE stage, uint32_t num_float);
+void createUniformArrayD3D11(ContextD3D11& ctx, UniformArrayD3D11& cb, UniformArrayDecl& decl);
 void destroyUniformArrayD3D11(UniformArrayD3D11& cb);
-void uploadUniformArrayD3D11(ContextD3D11& ctx, UniformArrayD3D11& cb, float* data, uint32_t num_float);
+void uploadUniformArrayD3D11(ContextD3D11& ctx, UniformArrayD3D11& cb, const void* data, size_t num_bytes);
 
 } // namespace gl
 } // namespace moge

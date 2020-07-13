@@ -1,17 +1,21 @@
 #include "uniform_array.hpp"
 
-void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::UniformArrayD3D11& cb, enum MOGE_GL_SHADER_STAGE stage, uint32_t num_float) {
+void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::UniformArrayD3D11& cb, UniformArrayDecl& decl) {
   MOGE_ASSERT(!cb.buffer_id);
   MOGE_ASSERT(!cb.shader_stage);
-  MOGE_ASSERT(num_float);
+  MOGE_ASSERT(!cb.num_element);
+  MOGE_ASSERT(decl.stage);
+  MOGE_ASSERT(decl.type == MOGE_GL_UNIFORM_ARRAY_TYPE_FLOAT4);
+  MOGE_ASSERT(decl.num_element);
 
-  UINT bytewidth = sizeof(float) * num_float;
+  UINT bytewidth = sizeof(float) * decl.num_element;
   if (bytewidth < 16) {
     bytewidth += 16 - bytewidth;
   }
   else {
     bytewidth += bytewidth % 16;
   }
+  MOGE_ASSERT(bytewidth <= UINT16_MAX);
 
   D3D11_BUFFER_DESC cbd;
   ZeroMemory(&cbd, sizeof(D3D11_BUFFER_DESC));
@@ -26,19 +30,26 @@ void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Un
   hr = ctx.d3d_device->CreateBuffer(&cbd, NULL, &cb.buffer_id);
   MOGE_ASSERT(SUCCEEDED(hr));
 
-  cb.shader_stage = stage;
+  cb.shader_stage = decl.stage;
+  cb.num_element = decl.num_element;
 }
 
 void moge::gl::destroyUniformArrayD3D11(moge::gl::UniformArrayD3D11& cb) {
   MOGE_ASSERT(cb.buffer_id);
   MOGE_ASSERT(cb.shader_stage);
+  MOGE_ASSERT(cb.num_element);
+
   cb.buffer_id->Release();
   cb.buffer_id = NULL;
   cb.shader_stage = MOGE_GL_SHADER_STAGE_UNDEFINED;
+  cb.num_element = 0;
 }
 
-void moge::gl::uploadUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::UniformArrayD3D11& cb, float* data, uint32_t num_float) {
+void moge::gl::uploadUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::UniformArrayD3D11& cb, const void* data, size_t num_bytes) {
   MOGE_ASSERT(cb.buffer_id);
+  MOGE_ASSERT(cb.shader_stage);
+  MOGE_ASSERT(cb.num_element);
+  MOGE_ASSERT(num_bytes == (sizeof(float) * cb.num_element));
 
   D3D11_MAPPED_SUBRESOURCE mapped;
   ZeroMemory(&mapped, sizeof(D3D11_MAPPED_SUBRESOURCE));
@@ -46,6 +57,6 @@ void moge::gl::uploadUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Un
   HRESULT hr;
   hr = ctx.d3d_device_context->Map(cb.buffer_id, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
   MOGE_ASSERT(SUCCEEDED(hr));
-  memcpy(mapped.pData, data, sizeof(float) * num_float);
+  memcpy(mapped.pData, data, sizeof(float) * cb.num_element);
   ctx.d3d_device_context->Unmap(cb.buffer_id, 0);
 }
