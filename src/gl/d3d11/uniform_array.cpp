@@ -6,9 +6,9 @@ void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Un
   MOGE_ASSERT(!cb.num_element);
   MOGE_ASSERT(decl.stage);
   MOGE_ASSERT(decl.type == MOGE_GL_UNIFORM_ARRAY_TYPE_FLOAT4);
-  MOGE_ASSERT(decl.num_element);
+  MOGE_ASSERT(decl.numElement);
 
-  UINT bytewidth = sizeof(float) * decl.num_element;
+  UINT bytewidth = sizeof(float) * decl.numElement;
   if (bytewidth < 16) {
     bytewidth += 16 - bytewidth;
   }
@@ -31,7 +31,7 @@ void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Un
   MOGE_ASSERT(SUCCEEDED(hr));
 
   cb.shader_stage = decl.stage;
-  cb.num_element = decl.num_element;
+  cb.num_element = decl.numElement;
 }
 
 void moge::gl::destroyUniformArrayD3D11(moge::gl::UniformArrayD3D11& cb) {

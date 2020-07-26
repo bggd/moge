@@ -1,16 +1,27 @@
 #include "texture.hpp"
 
-void moge::gl::createTextureD3D11(moge::gl::ContextD3D11& ctx, moge::gl::TextureD3D11& tex, const void* rgba, uint32_t width, uint32_t height) {
+void moge::gl::createTextureD3D11(moge::gl::ContextD3D11& ctx, moge::gl::TextureD3D11& tex, moge::gl::TextureDecl& decl) {
   MOGE_ASSERT(!tex.texture_id);
   MOGE_ASSERT(!tex.srv);
+  MOGE_ASSERT(decl.data);
+  MOGE_ASSERT(decl.width);
+  MOGE_ASSERT(decl.height);
+  MOGE_ASSERT(decl.imageFormat);
+  MOGE_ASSERT(decl.minFilter);
+  MOGE_ASSERT(decl.magFilter);
+
+  static const DXGI_FORMAT _Formats[2] = {
+    DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8G8B8A8_UNORM
+  };
+  DXGI_FORMAT fmt = _Formats[decl.imageFormat];
 
   D3D11_TEXTURE2D_DESC td;
   ZeroMemory(&td, sizeof(D3D11_TEXTURE2D_DESC));
-  td.Width = width;
-  td.Height = height;
+  td.Width = decl.width;
+  td.Height = decl.height;
   td.MipLevels = 1;
   td.ArraySize = 1;
-  td.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+  td.Format = fmt;
   td.SampleDesc.Count = 1;
   td.SampleDesc.Quality = 0;
   td.Usage = D3D11_USAGE_IMMUTABLE;
@@ -20,9 +31,9 @@ void moge::gl::createTextureD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Texture
 
   D3D11_SUBRESOURCE_DATA init_data;
   ZeroMemory(&init_data, sizeof(D3D11_SUBRESOURCE_DATA));
-  init_data.pSysMem = rgba;
-  init_data.SysMemPitch = width * 4;
-  init_data.SysMemSlicePitch = width * height * 4;
+  init_data.pSysMem = decl.data;
+  init_data.SysMemPitch = decl.width * 4;
+  init_data.SysMemSlicePitch = decl.width * decl.height * 4;
 
   D3D11_SUBRESOURCE_DATA ary[2];
   ZeroMemory(&ary, sizeof(D3D11_SUBRESOURCE_DATA) * 2);

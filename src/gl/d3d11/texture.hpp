@@ -2,7 +2,7 @@
 #define MOGE_SRC_GL_D3D11_TEXTURE_HPP_INCLUDED
 
 #include "context.hpp"
-#include "../../trivial.hpp"
+#include "../gl.hpp"
 
 namespace moge {
 namespace gl {
@@ -12,7 +12,7 @@ struct TextureD3D11 {
   ID3D11ShaderResourceView* srv;
 };
 
-void createTextureD3D11(ContextD3D11& ctx, TextureD3D11& tex, const void* rgba, uint32_t width, uint32_t height);
+void createTextureD3D11(ContextD3D11& ctx, TextureD3D11& tex, TextureDecl& decl);
 void destroyTextureD3D11(TextureD3D11& tex);
 
 } // namespace gl

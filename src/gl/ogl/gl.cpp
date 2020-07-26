@@ -15,7 +15,7 @@ void moge::gl::setShaderOGL(moge::gl::ContextOGL&, moge::gl::ShaderOGL& shdr) {
   MOGE_GL_CHECK(glUseProgram(shdr.id));
 }
 
-void moge::gl::setUniformArrayD3D11(moge::gl::ContextOGL&, moge::gl::UniformArrayOGL&) {
+void moge::gl::setUniformArrayOGL(moge::gl::ContextOGL&, moge::gl::UniformArrayOGL&) {
 }
 
 void moge::gl::setTextureOGL(moge::gl::ContextOGL&, moge::gl::TextureOGL& tex) {

@@ -4,6 +4,6 @@
 #include "macro.hpp"
 
 #include <stdint.h>
-#include <string.h> // memcpy
+#include <string.h> // memcpy memset
 
 #endif // MOGE_SRC_TRIVIAL_HPP_INCLUDED

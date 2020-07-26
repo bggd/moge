@@ -9,16 +9,16 @@ void moge::gl::createUniformArrayOGL(moge::gl::ContextOGL&, moge::gl::ShaderOGL&
   MOGE_ASSERT(!cb.type);
   MOGE_ASSERT(decl.name);
   MOGE_ASSERT(decl.type == MOGE_GL_UNIFORM_ARRAY_TYPE_FLOAT4);
-  MOGE_ASSERT(decl.num_element);
-  MOGE_ASSERT((decl.num_element * sizeof(float)) <= UINT16_MAX);
-  MOGE_ASSERT(((decl.num_element * sizeof(float)) % 4) == 0);
+  MOGE_ASSERT(decl.numElement);
+  MOGE_ASSERT((decl.numElement * sizeof(float)) <= UINT16_MAX);
+  MOGE_ASSERT(((decl.numElement * sizeof(float)) % 4) == 0);
 
   GLint loc;
   MOGE_GL_CHECK(loc = glGetUniformLocation(shdr.id, decl.name));
   MOGE_ASSERT(loc > 0);
 
   cb.loc = loc;
-  cb.num_element = decl.num_element;
+  cb.num_element = decl.numElement;
   cb.type = decl.type;
 }
 

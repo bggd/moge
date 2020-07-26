@@ -6,9 +6,9 @@ void moge::gl::createTextureOGL(moge::gl::ContextOGL&, moge::gl::TextureOGL& tex
   MOGE_ASSERT(decl.data);
   MOGE_ASSERT(decl.width);
   MOGE_ASSERT(decl.height);
-  MOGE_ASSERT(decl.image_format);
-  MOGE_ASSERT(decl.min_filter);
-  MOGE_ASSERT(decl.mag_filter);
+  MOGE_ASSERT(decl.imageFormat);
+  MOGE_ASSERT(decl.minFilter);
+  MOGE_ASSERT(decl.magFilter);
 
   GLuint id;
   MOGE_GL_CHECK(glGenTextures(1, &id));
@@ -19,23 +19,23 @@ void moge::gl::createTextureOGL(moge::gl::ContextOGL&, moge::gl::TextureOGL& tex
   MOGE_GL_CHECK(ok = glIsTexture(id));
   MOGE_ASSERT(ok);
 
-  static const GLint _filters[3] = {
+  static const GLint Filters[3] = {
       0, GL_LINEAR, GL_NEAREST};
 
   GLint filter;
-  filter = _filters[decl.min_filter];
+  filter = Filters[decl.minFilter];
   MOGE_GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter));
 
-  filter = _filters[decl.mag_filter];
+  filter = Filters[decl.magFilter];
   MOGE_GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter));
 
-  static const GLint _internal_formats[3] = {
-      0, GL_RGB8, GL_RGBA8};
-  static const GLenum _formats[3] = {
-      0, GL_RGB, GL_RGBA};
+  static const GLint _internal_formats[2] = {
+      0, GL_RGBA8};
+  static const GLenum _formats[2] = {
+      0, GL_RGBA};
 
-  GLint internal_fmt = _internal_formats[decl.image_format];
-  GLenum fmt = _formats[decl.image_format];
+  GLint internal_fmt = _internal_formats[decl.imageFormat];
+  GLenum fmt = _formats[decl.imageFormat];
 
   MOGE_GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, internal_fmt, decl.width, decl.height, 0, fmt, GL_UNSIGNED_BYTE, decl.data));
 

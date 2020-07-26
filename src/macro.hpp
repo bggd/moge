@@ -15,3 +15,12 @@
 #define MOGE_ASSERT(c) assert(c)
 #endif // MOGE_ASSERT
 
+#ifndef MOGE_MALLOC
+  #include <stdlib.h>
+  #define MOGE_MALLOC(size) malloc(size)
+#endif // MOGE_MALLOC
+
+#ifndef MOGE_FREE
+  #include <stdlib.h>
+  #define MOGE_FREE(ptr) free(ptr)
+#endif // MOGE_FREE

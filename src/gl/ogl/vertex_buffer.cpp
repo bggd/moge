@@ -19,7 +19,7 @@ void moge::gl::createVertexBufferOGL(moge::gl::ContextOGL&, moge::gl::VertexBuff
   vbo.num_bytes = num_bytes;
 }
 
-void moge::gl::destroyVertexBufferOGL(moge::gl::ContextOGL&, moge::gl::VertexBufferOGL& vbo) {
+void moge::gl::destroyVertexBufferOGL(moge::gl::VertexBufferOGL& vbo) {
   MOGE_ASSERT(vbo.id);
   MOGE_ASSERT(vbo.num_bytes);
 

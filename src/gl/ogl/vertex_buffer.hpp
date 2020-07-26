@@ -14,7 +14,7 @@ struct VertexBufferOGL {
 };
 
 void createVertexBufferOGL(ContextOGL& ctx, VertexBufferOGL& vbo, uint32_t num_bytes);
-void destroyVertexBufferOGL(ContextOGL& ctx, VertexBufferOGL& vbo);
+void destroyVertexBufferOGL(VertexBufferOGL& vbo);
 void uploadVertexBufferOGL(ContextOGL& ctx, VertexBufferOGL& vbo, const void* vertices, size_t num_bytes);
 
 } // namespace gl
