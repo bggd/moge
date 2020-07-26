@@ -103,6 +103,7 @@ struct ContextDecl {
   uint32_t maxShaders;
   uint32_t maxUniformArrays;
   uint32_t maxVertexBuffers;
+  uint32_t maxTextures;
 };
 
 void createContext(Context& ctx, ContextDecl& decl);

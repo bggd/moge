@@ -143,6 +143,7 @@ void moge::gl::createContext(moge::gl::Context& ctx, moge::gl::ContextDecl& decl
   MOGE_ASSERT(decl.maxShaders);
   MOGE_ASSERT(decl.maxUniformArrays);
   MOGE_ASSERT(decl.maxVertexBuffers);
+  MOGE_ASSERT(decl.maxTextures);
 
   ctx.pimpl = static_cast<moge::gl::Context::ContextImpl*>(MOGE_MALLOC(sizeof(moge::gl::Context::ContextImpl)));
   MOGE_ASSERT(ctx.pimpl);
@@ -150,12 +151,14 @@ void moge::gl::createContext(moge::gl::Context& ctx, moge::gl::ContextDecl& decl
   ctx.pimpl->pool.shdr_pool.createHandlePool(decl.maxShaders);
   ctx.pimpl->pool.uary_pool.createHandlePool(decl.maxUniformArrays);
   ctx.pimpl->pool.vbo_pool.createHandlePool(decl.maxVertexBuffers);
+  ctx.pimpl->pool.vbo_pool.createHandlePool(decl.maxTextures);
   MOGE_GL_CREATE_CONTEXT(ctx.pimpl->ctx);
 }
 
 void moge::gl::destroyContext(Context& ctx) {
   MOGE_ASSERT(ctx.pimpl);
 
+  ctx.pimpl->pool.tex_pool.destroyHandlePool();
   ctx.pimpl->pool.vbo_pool.destroyHandlePool();
   ctx.pimpl->pool.uary_pool.destroyHandlePool();
   ctx.pimpl->pool.shdr_pool.destroyHandlePool();
