@@ -8,18 +8,18 @@ void moge::gl::createShaderOGL(ContextOGL&, ShaderOGL& shdr, ShaderDecl& decl) {
   MOGE_GL_CHECK(id = glCreateProgram());
   MOGE_ASSERT(id);
 
-  for (uint32_t i = 0; i < decl.num_input; ++i) {
-    MOGE_ASSERT(decl.input_ary[i].glsl_name);
-    MOGE_ASSERT(decl.input_ary[i].num_float > 0);
-    MOGE_ASSERT(decl.input_ary[i].num_float < 5);
+  for (uint32_t i = 0; i < decl.numInput; ++i) {
+    MOGE_ASSERT(decl.inputArray[i].glslAttributeName);
+    MOGE_ASSERT(decl.inputArray[i].numFloat > 0);
+    MOGE_ASSERT(decl.inputArray[i].numFloat < 5);
 
-    MOGE_GL_CHECK(glBindAttribLocation(id, decl.input_ary[i].glsl_index, decl.input_ary[i].glsl_name));
+    MOGE_GL_CHECK(glBindAttribLocation(id, decl.inputArray[i].glslAttributeLocation, decl.inputArray[i].glslAttributeName));
   }
 
   GLuint vs, fs;
   MOGE_GL_CHECK(vs = glCreateShader(GL_VERTEX_SHADER));
   MOGE_ASSERT(vs);
-  MOGE_GL_CHECK(glShaderSource(vs, 1, &decl.vertex_shader, NULL));
+  MOGE_GL_CHECK(glShaderSource(vs, 1, &decl.vertexShader, NULL));
   MOGE_GL_CHECK(glCompileShader(vs));
 
   GLint status;
@@ -28,7 +28,7 @@ void moge::gl::createShaderOGL(ContextOGL&, ShaderOGL& shdr, ShaderDecl& decl) {
 
   MOGE_GL_CHECK(fs = glCreateShader(GL_FRAGMENT_SHADER));
   MOGE_ASSERT(fs);
-  MOGE_GL_CHECK(glShaderSource(fs, 1, &decl.pixel_shader, NULL));
+  MOGE_GL_CHECK(glShaderSource(fs, 1, &decl.pixelShader, NULL));
   MOGE_GL_CHECK(glCompileShader(fs));
 
   MOGE_GL_CHECK(glGetShaderiv(fs, GL_COMPILE_STATUS, &status));
