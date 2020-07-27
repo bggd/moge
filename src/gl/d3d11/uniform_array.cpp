@@ -1,6 +1,7 @@
 #include "uniform_array.hpp"
+#include "shader.hpp"
 
-void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::UniformArrayD3D11& cb, UniformArrayDecl& decl) {
+void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3D11&, moge::gl::UniformArrayD3D11& cb, UniformArrayDecl& decl) {
   MOGE_ASSERT(!cb.buffer_id);
   MOGE_ASSERT(!cb.shader_stage);
   MOGE_ASSERT(!cb.num_element);

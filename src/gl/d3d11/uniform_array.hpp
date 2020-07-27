@@ -2,6 +2,7 @@
 #define MOGE_SRC_GL_D3D11_UNIFORM_ARRAY_HPP_INCLUDED
 
 #include "context.hpp"
+#include "shader.hpp"
 #include "../gl.hpp"
 
 namespace moge {
@@ -13,7 +14,7 @@ struct UniformArrayD3D11 {
   uint32_t num_element;
 };
 
-void createUniformArrayD3D11(ContextD3D11& ctx, UniformArrayD3D11& cb, UniformArrayDecl& decl);
+void createUniformArrayD3D11(ContextD3D11& ctx, ShaderD3D11& shdr, UniformArrayD3D11& cb, UniformArrayDecl& decl);
 void destroyUniformArrayD3D11(UniformArrayD3D11& cb);
 void uploadUniformArrayD3D11(ContextD3D11& ctx, UniformArrayD3D11& cb, const void* data, size_t num_bytes);
 

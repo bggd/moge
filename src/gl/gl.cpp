@@ -13,12 +13,24 @@
 #include "ogl/uniform_array.hpp"
 #include "ogl/vertex_buffer.hpp"
 #include "ogl/texture.hpp"
+
+#include "ogl/context.cpp"
+#include "ogl/shader.cpp"
+#include "ogl/uniform_array.cpp"
+#include "ogl/vertex_buffer.cpp"
+#include "ogl/texture.cpp"
 #elif defined(MOGE_USE_DIRECT3D11)
 #include "d3d11/context.hpp"
 #include "d3d11/shader.hpp"
 #include "d3d11/uniform_array.hpp"
 #include "d3d11/vertex_buffer.hpp"
 #include "d3d11/texture.hpp"
+
+#include "d3d11/context.cpp"
+#include "d3d11/shader.cpp"
+#include "d3d11/uniform_array.cpp"
+#include "d3d11/vertex_buffer.cpp"
+#include "d3d11/texture.cpp"
 #endif
 
 #define MOGE_GL_GET_CONTEXT(ctx) ctx.pimpl->ctx
@@ -51,9 +63,9 @@ typedef moge::gl::TextureD3D11 MogeGLTexture;
 #define MOGE_GL_CREATE_CONTEXT(ctx) moge::gl::createContextD3D11(ctx)
 #define MOGE_GL_DESTROY_CONTEXT(ctx) moge::gl::destroyContextD3D11(ctx)
 #define MOGE_GL_RESIZE_BACK_BUFFER(ctx) moge::gl::resizeBackBufferD3D11(MOGE_GL_GET_CONTEXT(ctx))
-#define MOGE_GL_CREATE_SHADER(ctx, shdr, decl) moge::gl::createShaderD3D11(ctx, shdr, decl);
-#define MOGE_GL_DESTROY_SHADER(shdr) moge::gl::destroyShaderD3D11(shdr);
-#define MOGE_GL_CREATE_UNIFORM_ARRAY(ctx, shdr, uary, decl) moge::gl::UniformArrayD3D11(MOGE_GL_GET_CONTEXT(ctx), uary, decl)
+#define MOGE_GL_CREATE_SHADER(ctx, shdr, decl) moge::gl::createShaderD3D11(MOGE_GL_GET_CONTEXT(ctx), shdr, decl)
+#define MOGE_GL_DESTROY_SHADER(shdr) moge::gl::destroyShaderD3D11(shdr)
+#define MOGE_GL_CREATE_UNIFORM_ARRAY(ctx, shdr, uary, decl) moge::gl::createUniformArrayD3D11(MOGE_GL_GET_CONTEXT(ctx), shdr, uary, decl)
 #define MOGE_GL_DESTROY_UNIFORM_ARRAY(uary) moge::gl::destroyUniformArrayD3D11(uary)
 #define MOGE_GL_UPDATE_UNIFORM_ARRAY(ctx, uary, data, numbytes) moge::gl::uploadUniformArrayD3D11(MOGE_GL_GET_CONTEXT(ctx), uary, data, numbytes)
 #define MOGE_GL_CREATE_VERTEX_BUFFER(ctx, vbo, num_bytes) moge::gl::createVertexBufferD3D11(MOGE_GL_GET_CONTEXT(ctx), vbo, num_bytes)
