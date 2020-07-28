@@ -3,10 +3,6 @@
 
 #include "../handle_pool.hpp"
 
-#if !defined(MOGE_USE_OPENGL) && !defined(MOGE_USE_DIRECT3D11)
-#define MOGE_USE_OPENGL
-#endif
-
 #if defined(MOGE_USE_OPENGL)
 #include "ogl/context.hpp"
 #include "ogl/shader.hpp"
