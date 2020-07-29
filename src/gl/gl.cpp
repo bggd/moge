@@ -4,12 +4,14 @@
 #include "../handle_pool.hpp"
 
 #if defined(MOGE_USE_OPENGL)
+#include "ogl/bind.hpp"
 #include "ogl/context.hpp"
 #include "ogl/shader.hpp"
 #include "ogl/uniform_array.hpp"
 #include "ogl/vertex_buffer.hpp"
 #include "ogl/texture.hpp"
 
+#include "ogl/bind.cpp"
 #include "ogl/context.cpp"
 #include "ogl/shader.cpp"
 #include "ogl/uniform_array.cpp"
@@ -156,10 +158,24 @@ void moge::gl::createContext(moge::gl::Context& ctx, moge::gl::ContextDecl& decl
   ctx.pimpl = static_cast<moge::gl::Context::ContextImpl*>(MOGE_MALLOC(sizeof(moge::gl::Context::ContextImpl)));
   MOGE_ASSERT(ctx.pimpl);
 
+  moge::HandlePool<MogeGLShader> shdr_pool = {};
+  moge::HandlePool<MogeGLUniformArray> uary_pool = {};
+  moge::HandlePool<MogeGLVBO> vbo_pool = {};
+  moge::HandlePool<MogeGLTexture> tex_pool = {};
+
+  ctx.pimpl->pool.shdr_pool = shdr_pool;
+  ctx.pimpl->pool.uary_pool = uary_pool;
+  ctx.pimpl->pool.vbo_pool = vbo_pool;
+  ctx.pimpl->pool.tex_pool = tex_pool;
+
+  MogeGLCtx initctx = {};
+ 
+  ctx.pimpl->ctx = initctx;
+
   ctx.pimpl->pool.shdr_pool.createHandlePool(decl.maxShaders);
   ctx.pimpl->pool.uary_pool.createHandlePool(decl.maxUniformArrays);
   ctx.pimpl->pool.vbo_pool.createHandlePool(decl.maxVertexBuffers);
-  ctx.pimpl->pool.vbo_pool.createHandlePool(decl.maxTextures);
+  ctx.pimpl->pool.tex_pool.createHandlePool(decl.maxTextures);
   MOGE_GL_CREATE_CONTEXT(ctx.pimpl->ctx);
 }
 
