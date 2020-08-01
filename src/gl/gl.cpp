@@ -42,15 +42,15 @@ typedef moge::gl::TextureOGL MogeGLTexture;
 #define MOGE_GL_CREATE_CONTEXT(ctx) moge::gl::createContextOGL(ctx)
 #define MOGE_GL_DESTROY_CONTEXT(ctx) moge::gl::destroyContextOGL(ctx)
 #define MOGE_GL_RESIZE_BACK_BUFFER(ctx) moge::gl::resizeBackBufferOGL(MOGE_GL_GET_CONTEXT(ctx))
-#define MOGE_GL_CREATE_SHADER(ctx, shdr, decl) moge::gl::createShaderOGL(MOGE_GL_GET_CONTEXT(ctx), shdr, decl)
+#define MOGE_GL_CREATE_SHADER(ctx, shdr, desc) moge::gl::createShaderOGL(MOGE_GL_GET_CONTEXT(ctx), shdr, desc)
 #define MOGE_GL_DESTROY_SHADER(shdr) moge::gl::destroyShaderOGL(shdr)
-#define MOGE_GL_CREATE_UNIFORM_ARRAY(ctx, shdr, uary, decl) moge::gl::createUniformArrayOGL(MOGE_GL_GET_CONTEXT(ctx), shdr, uary, decl)
+#define MOGE_GL_CREATE_UNIFORM_ARRAY(ctx, shdr, uary, desc) moge::gl::createUniformArrayOGL(MOGE_GL_GET_CONTEXT(ctx), shdr, uary, desc)
 #define MOGE_GL_DESTROY_UNIFORM_ARRAY(uary) moge::gl::destroyUniformArrayOGL(uary)
 #define MOGE_GL_UPDATE_UNIFORM_ARRAY(ctx, uary, data, numbytes) moge::gl::uploadUniformArrayOGL(MOGE_GL_GET_CONTEXT(ctx), uary, data, numbytes)
 #define MOGE_GL_CREATE_VERTEX_BUFFER(ctx, vbo, num_bytes) moge::gl::createVertexBufferOGL(MOGE_GL_GET_CONTEXT(ctx), vbo, num_bytes)
 #define MOGE_GL_DESTROY_VERTEX_BUFFER(vbo) moge::gl::destroyVertexBufferOGL(vbo)
 #define MOGE_GL_UPDATE_VERTEX_BUFFER(ctx, vbo, vertices, numbytes) moge::gl::uploadVertexBufferOGL(MOGE_GL_GET_CONTEXT(ctx), vbo, vertices, numbytes)
-#define MOGE_GL_CREATE_TEXTURE(ctx, tex, decl) moge::gl::createTextureOGL(MOGE_GL_GET_CONTEXT(ctx), tex, decl)
+#define MOGE_GL_CREATE_TEXTURE(ctx, tex, desc) moge::gl::createTextureOGL(MOGE_GL_GET_CONTEXT(ctx), tex, desc)
 #define MOGE_GL_DESTROY_TEXTURE(tex) moge::gl::destroyTextureOGL(tex)
 #elif defined(MOGE_USE_DIRECT3D11)
 typedef moge::gl::ContextD3D11 MogeGLCtx;
@@ -61,15 +61,15 @@ typedef moge::gl::TextureD3D11 MogeGLTexture;
 #define MOGE_GL_CREATE_CONTEXT(ctx) moge::gl::createContextD3D11(ctx)
 #define MOGE_GL_DESTROY_CONTEXT(ctx) moge::gl::destroyContextD3D11(ctx)
 #define MOGE_GL_RESIZE_BACK_BUFFER(ctx) moge::gl::resizeBackBufferD3D11(MOGE_GL_GET_CONTEXT(ctx))
-#define MOGE_GL_CREATE_SHADER(ctx, shdr, decl) moge::gl::createShaderD3D11(MOGE_GL_GET_CONTEXT(ctx), shdr, decl)
+#define MOGE_GL_CREATE_SHADER(ctx, shdr, desc) moge::gl::createShaderD3D11(MOGE_GL_GET_CONTEXT(ctx), shdr, desc)
 #define MOGE_GL_DESTROY_SHADER(shdr) moge::gl::destroyShaderD3D11(shdr)
-#define MOGE_GL_CREATE_UNIFORM_ARRAY(ctx, shdr, uary, decl) moge::gl::createUniformArrayD3D11(MOGE_GL_GET_CONTEXT(ctx), shdr, uary, decl)
+#define MOGE_GL_CREATE_UNIFORM_ARRAY(ctx, shdr, uary, desc) moge::gl::createUniformArrayD3D11(MOGE_GL_GET_CONTEXT(ctx), shdr, uary, desc)
 #define MOGE_GL_DESTROY_UNIFORM_ARRAY(uary) moge::gl::destroyUniformArrayD3D11(uary)
 #define MOGE_GL_UPDATE_UNIFORM_ARRAY(ctx, uary, data, numbytes) moge::gl::uploadUniformArrayD3D11(MOGE_GL_GET_CONTEXT(ctx), uary, data, numbytes)
 #define MOGE_GL_CREATE_VERTEX_BUFFER(ctx, vbo, num_bytes) moge::gl::createVertexBufferD3D11(MOGE_GL_GET_CONTEXT(ctx), vbo, num_bytes)
 #define MOGE_GL_DESTROY_VERTEX_BUFFER(vbo) moge::gl::destroyVertexBufferD3D11(vbo)
 #define MOGE_GL_UPDATE_VERTEX_BUFFER(ctx, vbo, vertices, numbytes) moge::gl::uploadVertexBufferD3D11(MOGE_GL_GET_CONTEXT(ctx), vbo, vertices, numbytes)
-#define MOGE_GL_CREATE_TEXTURE(ctx, tex, decl) moge::gl::createTextureD3D11(MOGE_GL_GET_CONTEXT(ctx), tex, decl)
+#define MOGE_GL_CREATE_TEXTURE(ctx, tex, desc) moge::gl::createTextureD3D11(MOGE_GL_GET_CONTEXT(ctx), tex, desc)
 #define MOGE_GL_DESTROY_TEXTURE(tex) moge::gl::destroyTextureD3D11(tex)
 #endif
 
@@ -156,11 +156,11 @@ int moge::gl::getBackend() {
 #endif
 }
 
-moge::gl::Context moge::gl::createContext(moge::gl::ContextDecl& decl) {
-  MOGE_ASSERT(decl.maxShaders);
-  MOGE_ASSERT(decl.maxUniformArrays);
-  MOGE_ASSERT(decl.maxVertexBuffers);
-  MOGE_ASSERT(decl.maxTextures);
+moge::gl::Context moge::gl::createContext(moge::gl::ContextDesc& desc) {
+  MOGE_ASSERT(desc.maxShaders);
+  MOGE_ASSERT(desc.maxUniformArrays);
+  MOGE_ASSERT(desc.maxVertexBuffers);
+  MOGE_ASSERT(desc.maxTextures);
 
   moge::gl::Context ctx;
 
@@ -179,18 +179,18 @@ moge::gl::Context moge::gl::createContext(moge::gl::ContextDecl& decl) {
 
   MogeGLCtx glctx = {};
 #if defined(MOGE_USE_DIRECT3D11)
-  MOGE_ASSERT(decl.hwnd);
-  glctx.hwnd = static_cast<HWND>(decl.hwnd);
+  MOGE_ASSERT(desc.hwnd);
+  glctx.hwnd = static_cast<HWND>(desc.hwnd);
 #else
-  MOGE_ASSERT(decl.hwnd == NULL);
+  MOGE_ASSERT(desc.hwnd == NULL);
 #endif
 
   ctx.pimpl->ctx = glctx;
 
-  ctx.pimpl->pool.shdr_pool.createHandlePool(decl.maxShaders);
-  ctx.pimpl->pool.uary_pool.createHandlePool(decl.maxUniformArrays);
-  ctx.pimpl->pool.vbo_pool.createHandlePool(decl.maxVertexBuffers);
-  ctx.pimpl->pool.tex_pool.createHandlePool(decl.maxTextures);
+  ctx.pimpl->pool.shdr_pool.createHandlePool(desc.maxShaders);
+  ctx.pimpl->pool.uary_pool.createHandlePool(desc.maxUniformArrays);
+  ctx.pimpl->pool.vbo_pool.createHandlePool(desc.maxVertexBuffers);
+  ctx.pimpl->pool.tex_pool.createHandlePool(desc.maxTextures);
   MOGE_GL_CREATE_CONTEXT(ctx.pimpl->ctx);
 
   return ctx;
@@ -216,11 +216,11 @@ void moge::gl::resizeBackBuffer(moge::gl::Context& ctx) {
   MOGE_GL_RESIZE_BACK_BUFFER(ctx);
 }
 
-moge::gl::Shader moge::gl::createShader(moge::gl::Context& ctx, moge::gl::ShaderDecl& decl) {
+moge::gl::Shader moge::gl::createShader(moge::gl::Context& ctx, moge::gl::ShaderDesc& desc) {
   MOGE_ASSERT(ctx.pimpl);
 
   MogeGLShader shdr = {};
-  MOGE_GL_CREATE_SHADER(ctx, shdr, decl);
+  MOGE_GL_CREATE_SHADER(ctx, shdr, desc);
   moge::gl::Shader handle;
   moge::gl::detail::insertObject(ctx, shdr, handle);
   return handle;
@@ -234,12 +234,12 @@ void moge::gl::destroyShader(moge::gl::Context& ctx, moge::gl::Shader shdr) {
   moge::gl::detail::removeHandle<MogeGLShader>(ctx, shdr);
 }
 
-moge::gl::UniformArray moge::gl::createUniformArray(moge::gl::Context& ctx, moge::gl::Shader& shdr, moge::gl::UniformArrayDecl& decl) {
+moge::gl::UniformArray moge::gl::createUniformArray(moge::gl::Context& ctx, moge::gl::Shader& shdr, moge::gl::UniformArrayDesc& desc) {
   MOGE_ASSERT(ctx.pimpl);
 
   MogeGLShader* p = moge::gl::detail::getObject<MogeGLShader>(ctx, shdr);
   MogeGLUniformArray uary = {};
-  MOGE_GL_CREATE_UNIFORM_ARRAY(ctx, *p, uary, decl);
+  MOGE_GL_CREATE_UNIFORM_ARRAY(ctx, *p, uary, desc);
   moge::gl::UniformArray handle;
   moge::gl::detail::insertObject(ctx, uary, handle);
   return handle;
@@ -285,11 +285,11 @@ void moge::gl::updateVertexBuffer(moge::gl::Context& ctx, moge::gl::VertexBuffer
   MOGE_GL_UPDATE_VERTEX_BUFFER(ctx, *p, vertices, num_bytes);
 }
 
-moge::gl::Texture moge::gl::createTexture(moge::gl::Context& ctx, moge::gl::TextureDecl& decl) {
+moge::gl::Texture moge::gl::createTexture(moge::gl::Context& ctx, moge::gl::TextureDesc& desc) {
   MOGE_ASSERT(ctx.pimpl);
 
   MogeGLTexture tex = {};
-  MOGE_GL_CREATE_TEXTURE(ctx, tex, decl);
+  MOGE_GL_CREATE_TEXTURE(ctx, tex, desc);
   moge::gl::Texture handle;
   moge::gl::detail::insertObject(ctx, tex, handle);
   return handle;

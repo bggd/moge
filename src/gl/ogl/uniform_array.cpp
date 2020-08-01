@@ -3,23 +3,23 @@
 #include "bind.hpp"
 #include <stdint.h>
 
-void moge::gl::createUniformArrayOGL(moge::gl::ContextOGL&, moge::gl::ShaderOGL& shdr, moge::gl::UniformArrayOGL& cb, UniformArrayDecl& decl) {
+void moge::gl::createUniformArrayOGL(moge::gl::ContextOGL&, moge::gl::ShaderOGL& shdr, moge::gl::UniformArrayOGL& cb, UniformArrayDesc& desc) {
   MOGE_ASSERT(!cb.loc);
   MOGE_ASSERT(!cb.num_element);
   MOGE_ASSERT(!cb.type);
-  MOGE_ASSERT(decl.name);
-  MOGE_ASSERT(decl.type == MOGE_GL_UNIFORM_ARRAY_TYPE_FLOAT4);
-  MOGE_ASSERT(decl.numElement);
-  MOGE_ASSERT((decl.numElement * sizeof(float)) <= UINT16_MAX);
-  MOGE_ASSERT(((decl.numElement * sizeof(float)) % 4) == 0);
+  MOGE_ASSERT(desc.name);
+  MOGE_ASSERT(desc.type == MOGE_GL_UNIFORM_ARRAY_TYPE_FLOAT4);
+  MOGE_ASSERT(desc.numElement);
+  MOGE_ASSERT((desc.numElement * sizeof(float)) <= UINT16_MAX);
+  MOGE_ASSERT(((desc.numElement * sizeof(float)) % 4) == 0);
 
   GLint loc;
-  MOGE_GL_CHECK(loc = glGetUniformLocation(shdr.id, decl.name));
+  MOGE_GL_CHECK(loc = glGetUniformLocation(shdr.id, desc.name));
   MOGE_ASSERT(loc > 0);
 
   cb.loc = loc;
-  cb.num_element = decl.numElement;
-  cb.type = decl.type;
+  cb.num_element = desc.numElement;
+  cb.type = desc.type;
 }
 
 void moge::gl::destroyUniformArrayOGL(moge::gl::UniformArrayOGL& cb) {

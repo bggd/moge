@@ -12,7 +12,7 @@ struct TextureD3D11 {
   ID3D11ShaderResourceView* srv;
 };
 
-void createTextureD3D11(ContextD3D11& ctx, TextureD3D11& tex, TextureDecl& decl);
+void createTextureD3D11(ContextD3D11& ctx, TextureD3D11& tex, TextureDesc& desc);
 void destroyTextureD3D11(TextureD3D11& tex);
 
 } // namespace gl

@@ -11,7 +11,7 @@ struct TextureOGL {
   uint32_t id;
 };
 
-void createTextureOGL(ContextOGL& ctx, TextureOGL& tex, TextureDecl& decl);
+void createTextureOGL(ContextOGL& ctx, TextureOGL& tex, TextureDesc& desc);
 void destroyTextureOGL(TextureOGL& tex);
 
 } // namespace gl

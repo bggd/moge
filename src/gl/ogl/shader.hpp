@@ -11,7 +11,7 @@ struct ShaderOGL {
   uint32_t id;
 };
 
-void createShaderOGL(ContextOGL& ctx, ShaderOGL& shdr, ShaderDecl& decl);
+void createShaderOGL(ContextOGL& ctx, ShaderOGL& shdr, ShaderDesc& desc);
 void destroyShaderOGL(ShaderOGL& shdr);
 
 } // namespace gl

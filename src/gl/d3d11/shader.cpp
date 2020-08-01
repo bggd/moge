@@ -1,35 +1,35 @@
 #include "shader.hpp"
 
-void moge::gl::createShaderD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3D11& shdr, moge::gl::ShaderDecl& decl) {
+void moge::gl::createShaderD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3D11& shdr, moge::gl::ShaderDesc& desc) {
   MOGE_ASSERT(!shdr.input_layour_refptr);
   MOGE_ASSERT(!shdr.vs_id);
   MOGE_ASSERT(!shdr.ps_id);
   MOGE_ASSERT(!shdr.stride);
 
-  MOGE_ASSERT(decl.inputArray);
-  MOGE_ASSERT(decl.numInput);
-  MOGE_ASSERT(decl.numInput <= MOGE_GL_INPUT_ELEMENT_MAX);
-  MOGE_ASSERT(decl.vertexShader);
-  MOGE_ASSERT(decl.pixelShader);
-  MOGE_ASSERT(decl.numByteOfVertexShader);
-  MOGE_ASSERT(decl.numByteOfPixelShader);
+  MOGE_ASSERT(desc.inputArray);
+  MOGE_ASSERT(desc.numInput);
+  MOGE_ASSERT(desc.numInput <= MOGE_GL_INPUT_ELEMENT_MAX);
+  MOGE_ASSERT(desc.vertexShader);
+  MOGE_ASSERT(desc.pixelShader);
+  MOGE_ASSERT(desc.numByteOfVertexShader);
+  MOGE_ASSERT(desc.numByteOfPixelShader);
 
   D3D11_INPUT_ELEMENT_DESC descs[MOGE_GL_INPUT_ELEMENT_MAX];
   ZeroMemory(descs, sizeof(D3D11_INPUT_ELEMENT_DESC) * MOGE_GL_INPUT_ELEMENT_MAX);
 
   uint32_t offset = 0;
-  for (uint32_t i = 0; i < decl.numInput; ++i) {
-    MOGE_ASSERT(decl.inputArray[i].hlslSemanticName);
-    MOGE_ASSERT(decl.inputArray[i].numFloat > 0);
-    MOGE_ASSERT(decl.inputArray[i].numFloat < 5);
+  for (uint32_t i = 0; i < desc.numInput; ++i) {
+    MOGE_ASSERT(desc.inputArray[i].hlslSemanticName);
+    MOGE_ASSERT(desc.inputArray[i].numFloat > 0);
+    MOGE_ASSERT(desc.inputArray[i].numFloat < 5);
 
     D3D11_INPUT_ELEMENT_DESC& d = descs[i];
-    d.SemanticName = decl.inputArray[i].hlslSemanticName;
-    d.SemanticIndex = decl.inputArray[i].hlslSemanticIndex;
+    d.SemanticName = desc.inputArray[i].hlslSemanticName;
+    d.SemanticIndex = desc.inputArray[i].hlslSemanticIndex;
     d.AlignedByteOffset += offset;
 
     // clang-format off
-    switch (decl.inputArray[i].numFloat) {
+    switch (desc.inputArray[i].numFloat) {
       case 1: d.Format = DXGI_FORMAT_R32_FLOAT; offset += 4; break;
       case 2: d.Format = DXGI_FORMAT_R32G32_FLOAT; offset += 8; break;
       case 3: d.Format = DXGI_FORMAT_R32G32B32_FLOAT; offset += 12; break;
@@ -46,13 +46,13 @@ void moge::gl::createShaderD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3
   shdr.stride = offset;
 
   HRESULT hr;
-  hr = ctx.d3d_device->CreateInputLayout(descs, decl.numInput, decl.vertexShader, decl.numByteOfVertexShader, &shdr.input_layour_refptr);
+  hr = ctx.d3d_device->CreateInputLayout(descs, desc.numInput, desc.vertexShader, desc.numByteOfVertexShader, &shdr.input_layour_refptr);
   MOGE_ASSERT(SUCCEEDED(hr));
 
-  hr = ctx.d3d_device->CreateVertexShader(decl.vertexShader, decl.numByteOfVertexShader, NULL, &shdr.vs_id);
+  hr = ctx.d3d_device->CreateVertexShader(desc.vertexShader, desc.numByteOfVertexShader, NULL, &shdr.vs_id);
   MOGE_ASSERT(SUCCEEDED(hr));
 
-  hr = ctx.d3d_device->CreatePixelShader(decl.pixelShader, decl.numByteOfPixelShader, NULL, &shdr.ps_id);
+  hr = ctx.d3d_device->CreatePixelShader(desc.pixelShader, desc.numByteOfPixelShader, NULL, &shdr.ps_id);
   MOGE_ASSERT(SUCCEEDED(hr));
 }
 

@@ -53,7 +53,7 @@ struct InputLayout {
 };
 
 
-struct ShaderDecl {
+struct ShaderDesc {
   InputLayout* inputArray;
   uint32_t numInput;
   const char* vertexShader;
@@ -62,14 +62,14 @@ struct ShaderDecl {
   size_t numByteOfPixelShader;
 };
 
-struct UniformArrayDecl {
+struct UniformArrayDesc {
   const char* name;
   enum MOGE_GL_SHADER_STAGE stage;
   enum MOGE_GL_UNIFORM_ARRAY_TYPE type;
   uint32_t numElement;
 };
 
-struct TextureDecl {
+struct TextureDesc {
   const void* data;
   uint32_t width;
   uint32_t height;
@@ -99,7 +99,7 @@ struct Context {
   ContextImpl* pimpl;
 };
 
-struct ContextDecl {
+struct ContextDesc {
   uint32_t maxShaders;
   uint32_t maxUniformArrays;
   uint32_t maxVertexBuffers;
@@ -108,18 +108,18 @@ struct ContextDecl {
 };
 
 int getBackend();
-Context createContext(ContextDecl& decl);
+Context createContext(ContextDesc& desc);
 void destroyContext(Context& ctx);
 void resizeBackBuffer(Context& ctx);
-Shader createShader(Context& ctx, ShaderDecl& decl);
+Shader createShader(Context& ctx, ShaderDesc& desc);
 void destroyShader(Context& ctx, Shader shdr);
-UniformArray createUniformArray(Context& ctx, Shader& shdr, UniformArrayDecl& decl);
+UniformArray createUniformArray(Context& ctx, Shader& shdr, UniformArrayDesc& desc);
 void destroyUniformArray(Context& ctx, UniformArray& uary);
 void updateUniformArray(Context& ctx, UniformArray& uary, const void* data, size_t num_bytes);
 VertexBuffer createVertexBuffer(Context& ctx, uint32_t num_bytes);
 void destroyVertexBuffer(Context& ctx, VertexBuffer& vbo);
 void updateVertexBuffer(Context& ctx, VertexBuffer& vbo, const void* vertices, size_t num_bytes);
-Texture createTexture(Context& ctx, TextureDecl& decl);
+Texture createTexture(Context& ctx, TextureDesc& desc);
 void destroyTexture(Context& ctx, Texture& tex);
 
 } // namespace gl

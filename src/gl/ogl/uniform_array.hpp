@@ -14,7 +14,7 @@ struct UniformArrayOGL {
   enum MOGE_GL_UNIFORM_ARRAY_TYPE type;
 };
 
-void createUniformArrayOGL(ContextOGL& ctx, ShaderOGL& shdr, UniformArrayOGL& cb, UniformArrayDecl& decl);
+void createUniformArrayOGL(ContextOGL& ctx, ShaderOGL& shdr, UniformArrayOGL& cb, UniformArrayDesc& desc);
 void destroyUniformArrayOGL(UniformArrayOGL& cb);
 void uploadUniformArrayOGL(ContextOGL& ctx, UniformArrayOGL& cb, const void* data, size_t num_bytes);
 

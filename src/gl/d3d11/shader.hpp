@@ -14,7 +14,7 @@ struct ShaderD3D11 {
   uint32_t stride;
 };
 
-void createShaderD3D11(ContextD3D11& ctx, ShaderD3D11& shdr, ShaderDecl& decl);
+void createShaderD3D11(ContextD3D11& ctx, ShaderD3D11& shdr, ShaderDesc& desc);
 void destroyShaderD3D11(ShaderD3D11& shdr);
 
 } // namespace gl

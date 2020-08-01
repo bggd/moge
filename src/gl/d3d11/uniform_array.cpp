@@ -1,15 +1,15 @@
 #include "uniform_array.hpp"
 #include "shader.hpp"
 
-void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3D11&, moge::gl::UniformArrayD3D11& cb, UniformArrayDecl& decl) {
+void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::ShaderD3D11&, moge::gl::UniformArrayD3D11& cb, UniformArrayDesc& desc) {
   MOGE_ASSERT(!cb.buffer_id);
   MOGE_ASSERT(!cb.shader_stage);
   MOGE_ASSERT(!cb.num_element);
-  MOGE_ASSERT(decl.stage);
-  MOGE_ASSERT(decl.type == MOGE_GL_UNIFORM_ARRAY_TYPE_FLOAT4);
-  MOGE_ASSERT(decl.numElement);
+  MOGE_ASSERT(desc.stage);
+  MOGE_ASSERT(desc.type == MOGE_GL_UNIFORM_ARRAY_TYPE_FLOAT4);
+  MOGE_ASSERT(desc.numElement);
 
-  UINT bytewidth = sizeof(float) * decl.numElement;
+  UINT bytewidth = sizeof(float) * desc.numElement;
   if (bytewidth < 16) {
     bytewidth += 16 - bytewidth;
   }
@@ -31,8 +31,8 @@ void moge::gl::createUniformArrayD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Sh
   hr = ctx.d3d_device->CreateBuffer(&cbd, NULL, &cb.buffer_id);
   MOGE_ASSERT(SUCCEEDED(hr));
 
-  cb.shader_stage = decl.stage;
-  cb.num_element = decl.numElement;
+  cb.shader_stage = desc.stage;
+  cb.num_element = desc.numElement;
 }
 
 void moge::gl::destroyUniformArrayD3D11(moge::gl::UniformArrayD3D11& cb) {
