@@ -176,7 +176,7 @@ moge::gl::Context moge::gl::createContext(moge::gl::ContextDecl& decl) {
 #else
   MOGE_ASSERT(decl.hwnd == NULL);
 #endif
- 
+
   ctx.pimpl->ctx = glctx;
 
   ctx.pimpl->pool.shdr_pool.createHandlePool(decl.maxShaders);
@@ -184,6 +184,8 @@ moge::gl::Context moge::gl::createContext(moge::gl::ContextDecl& decl) {
   ctx.pimpl->pool.vbo_pool.createHandlePool(decl.maxVertexBuffers);
   ctx.pimpl->pool.tex_pool.createHandlePool(decl.maxTextures);
   MOGE_GL_CREATE_CONTEXT(ctx.pimpl->ctx);
+
+  return ctx;
 }
 
 void moge::gl::destroyContext(Context& ctx) {
