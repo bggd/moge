@@ -154,7 +154,7 @@ moge::gl::Context moge::gl::createContext(moge::gl::ContextDecl& decl) {
   MOGE_ASSERT(decl.maxVertexBuffers);
   MOGE_ASSERT(decl.maxTextures);
 
-  Context ctx;
+  moge::gl::Context ctx;
 
   ctx.pimpl = static_cast<moge::gl::Context::ContextImpl*>(MOGE_MALLOC(sizeof(moge::gl::Context::ContextImpl)));
   MOGE_ASSERT(ctx.pimpl);
