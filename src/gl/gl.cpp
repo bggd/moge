@@ -148,6 +148,14 @@ void moge::gl::detail::removeHandle(moge::gl::Context& ctx, HandleType& handle) 
   pool->removeHandle(handle.handle);
 }
 
+enum MOGE_GL_BACKEND moge::gl::getBackend() {
+#if defined(MOGE_USE_OPENGL)
+  return MOGE_GL_BACKEND_OGL;
+#else
+  return MOGE_GL_BACKEND_D3D11;
+#endif
+}
+
 moge::gl::Context moge::gl::createContext(moge::gl::ContextDecl& decl) {
   MOGE_ASSERT(decl.maxShaders);
   MOGE_ASSERT(decl.maxUniformArrays);
