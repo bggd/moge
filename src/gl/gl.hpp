@@ -104,9 +104,10 @@ struct ContextDecl {
   uint32_t maxUniformArrays;
   uint32_t maxVertexBuffers;
   uint32_t maxTextures;
+  void* hwnd;
 };
 
-void createContext(Context& ctx, ContextDecl& decl);
+Context createContext(ContextDecl& decl);
 void destroyContext(Context& ctx);
 void resizeBackBuffer(Context& ctx);
 Shader createShader(Context& ctx, ShaderDecl& decl);
