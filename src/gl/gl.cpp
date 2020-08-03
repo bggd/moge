@@ -61,6 +61,7 @@ typedef moge::gl::TextureOGL MogeGLTexture;
 #define MOGE_GL_SET_SHADER(ctx, shdr) moge::gl::setShaderOGL(MOGE_GL_GET_CONTEXT(ctx), shdr)
 #define MOGE_GL_SET_UNIFORM_ARRAY(ctx, uary) moge::gl::setUniformArrayOGL(MOGE_GL_GET_CONTEXT(ctx), shdr)
 #define MOGE_GL_SET_TEXTURE(ctx, tex) moge::gl::setTextureOGL(MOGE_GL_GET_CONTEXT(ctx), tex)
+#define MOGE_GL_SET_VERTEX_BUFFER(ctx, vbo) moge::gl::setVertexBufferOGL(MOGE_GL_GET_CONTEXT(ctx), vbo)
 #define MOGE_GL_DRAW(ctx, topology, count, offset) moge::gl::drawOGL(MOGE_GL_GET_CONTEXT(ctx), topology, count, offset)
 #elif defined(MOGE_USE_DIRECT3D11)
 typedef moge::gl::ContextD3D11 MogeGLCtx;
@@ -86,6 +87,7 @@ typedef moge::gl::TextureD3D11 MogeGLTexture;
 #define MOGE_GL_SET_SHADER(ctx, shdr) moge::gl::setShaderD3D11(MOGE_GL_GET_CONTEXT(ctx), shdr)
 #define MOGE_GL_SET_UNIFORM_ARRAY(ctx, uary) moge::gl::setUniformArrayD3D11(MOGE_GL_GET_CONTEXT(ctx), uary)
 #define MOGE_GL_SET_TEXTURE(ctx, tex) moge::gl::setTextureD3D11(MOGE_GL_GET_CONTEXT(ctx), tex)
+#define MOGE_GL_SET_VERTEX_BUFFER(ctx, vbo) moge::gl::setVertexBufferD3D11(MOGE_GL_GET_CONTEXT(ctx), vbo)
 #define MOGE_GL_DRAW(ctx, topology, count, offset) moge::gl::drawD3D11(MOGE_GL_GET_CONTEXT(ctx), topology, count, offset)
 #endif
 
@@ -350,6 +352,13 @@ void moge::gl::setTexture(moge::gl::Context& ctx, moge::gl::Texture& tex) {
 
   MogeGLTexture* p = moge::gl::detail::getObject<MogeGLTexture>(ctx, tex);
   MOGE_GL_SET_TEXTURE(ctx, *p);
+}
+
+void moge::gl::setVertexBuffer(moge::gl::Context& ctx, moge::gl::VertexBuffer& vbo) {
+  MOGE_ASSERT(ctx.pimpl);
+
+  MogeGLVBO* p = moge::gl::detail::getObject<MogeGLVBO>(ctx, vbo);
+  MOGE_GL_SET_VERTEX_BUFFER(ctx, *p);
 }
 
 void moge::gl::draw(moge::gl::Context& ctx, enum MOGE_GL_DRAW_PRIMITIVE topology, uint32_t count, uint16_t offset) {
