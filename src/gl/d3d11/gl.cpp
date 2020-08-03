@@ -45,8 +45,12 @@ void moge::gl::setVertexBufferD3D11(moge::gl::ContextD3D11& ctx, moge::gl::Verte
   ctx.num_byte_of_vbo = vbo.num_bytes;
 }
 
-void moge::gl::drawD3D11(moge::gl::ContextD3D11& ctx, uint32_t count, uint16_t offset) {
+void moge::gl::drawD3D11(moge::gl::ContextD3D11& ctx, enum MOGE_GL_DRAW_PRIMITIVE topology, uint32_t count, uint16_t offset) {
+  MOGE_ASSERT(topology == MOGE_GL_DRAW_PRIMITIVE_TRIANGLES);
+
   const UINT stride = ctx.stride_from_shader;
   MOGE_ASSERT(((count + offset) * stride) <= ctx.num_byte_of_vbo);
+
+  ctx.d3d_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
   ctx.d3d_device_context->Draw(count * stride, offset * stride);
 }

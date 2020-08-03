@@ -122,6 +122,14 @@ void updateVertexBuffer(Context& ctx, VertexBuffer& vbo, const void* vertices, s
 Texture createTexture(Context& ctx, TextureDesc& desc);
 void destroyTexture(Context& ctx, Texture& tex);
 
+void clear(Context& ctx, float R, float G, float B, float A);
+void present(Context& ctx);
+void setShader(Context& ctx, Shader& shdr);
+void setUniformArray(Context& ctx, UniformArray& uary);
+void setTexture(Context& ctx, Texture& tex);
+void setVertexBuffer(Context& ctx, VertexBuffer& vbo);
+void draw(Context& ctx, enum MOGE_GL_DRAW_PRIMITIVE topology, uint32_t count, uint16_t offset);
+
 } // namespace gl
 } // namespace moge
 

@@ -51,8 +51,6 @@ void setDefaults(ContextD3D11& ctx) {
   hr = ctx.d3d_device->CreateRasterizerState(&rd, &rasterizer_state);
   MOGE_ASSERT(SUCCEEDED(hr));
   rasterizer_state->Release();
-
-  ctx.d3d_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 } // namespace detail

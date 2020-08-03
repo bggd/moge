@@ -10,6 +10,7 @@
 #include "ogl/uniform_array.hpp"
 #include "ogl/vertex_buffer.hpp"
 #include "ogl/texture.hpp"
+#include "ogl/gl.hpp"
 
 #include "ogl/bind.cpp"
 #include "ogl/context.cpp"
@@ -17,18 +18,21 @@
 #include "ogl/uniform_array.cpp"
 #include "ogl/vertex_buffer.cpp"
 #include "ogl/texture.cpp"
+#include "ogl/ogl.cpp"
 #elif defined(MOGE_USE_DIRECT3D11)
 #include "d3d11/context.hpp"
 #include "d3d11/shader.hpp"
 #include "d3d11/uniform_array.hpp"
 #include "d3d11/vertex_buffer.hpp"
 #include "d3d11/texture.hpp"
+#include "d3d11/gl.hpp"
 
 #include "d3d11/context.cpp"
 #include "d3d11/shader.cpp"
 #include "d3d11/uniform_array.cpp"
 #include "d3d11/vertex_buffer.cpp"
 #include "d3d11/texture.cpp"
+#include "d3d11/gl.cpp"
 #endif
 
 #define MOGE_GL_GET_CONTEXT(ctx) ctx.pimpl->ctx
@@ -52,6 +56,12 @@ typedef moge::gl::TextureOGL MogeGLTexture;
 #define MOGE_GL_UPDATE_VERTEX_BUFFER(ctx, vbo, vertices, numbytes) moge::gl::uploadVertexBufferOGL(MOGE_GL_GET_CONTEXT(ctx), vbo, vertices, numbytes)
 #define MOGE_GL_CREATE_TEXTURE(ctx, tex, desc) moge::gl::createTextureOGL(MOGE_GL_GET_CONTEXT(ctx), tex, desc)
 #define MOGE_GL_DESTROY_TEXTURE(tex) moge::gl::destroyTextureOGL(tex)
+#define MOGE_GL_CLEAR(ctx, r, g, b, a) moge::gl::clearOGL(MOGE_GL_GET_CONTEXT(ctx), r, g, b, a)
+#define MOGE_GL_PRESENT(ctx) moge::gl::presentOGL(MOGE_GL_GET_CONTEXT(ctx))
+#define MOGE_GL_SET_SHADER(ctx, shdr) moge::gl::setShaderOGL(MOGE_GL_GET_CONTEXT(ctx), shdr)
+#define MOGE_GL_SET_UNIFORM_ARRAY(ctx, uary) moge::gl::setUniformArrayOGL(MOGE_GL_GET_CONTEXT(ctx), shdr)
+#define MOGE_GL_SET_TEXTURE(ctx, tex) moge::gl::setTextureOGL(MOGE_GL_GET_CONTEXT(ctx), tex)
+#define MOGE_GL_DRAW(ctx, topology, count, offset) moge::gl::drawOGL(MOGE_GL_GET_CONTEXT(ctx), topology, count, offset)
 #elif defined(MOGE_USE_DIRECT3D11)
 typedef moge::gl::ContextD3D11 MogeGLCtx;
 typedef moge::gl::ShaderD3D11 MogeGLShader;
@@ -71,6 +81,12 @@ typedef moge::gl::TextureD3D11 MogeGLTexture;
 #define MOGE_GL_UPDATE_VERTEX_BUFFER(ctx, vbo, vertices, numbytes) moge::gl::uploadVertexBufferD3D11(MOGE_GL_GET_CONTEXT(ctx), vbo, vertices, numbytes)
 #define MOGE_GL_CREATE_TEXTURE(ctx, tex, desc) moge::gl::createTextureD3D11(MOGE_GL_GET_CONTEXT(ctx), tex, desc)
 #define MOGE_GL_DESTROY_TEXTURE(tex) moge::gl::destroyTextureD3D11(tex)
+#define MOGE_GL_CLEAR(ctx, r, g, b, a) moge::gl::clearD3D11(MOGE_GL_GET_CONTEXT(ctx), r, g, b, a)
+#define MOGE_GL_PRESENT(ctx) moge::gl::presentD3D11(MOGE_GL_GET_CONTEXT(ctx))
+#define MOGE_GL_SET_SHADER(ctx, shdr) moge::gl::setShaderD3D11(MOGE_GL_GET_CONTEXT(ctx), shdr)
+#define MOGE_GL_SET_UNIFORM_ARRAY(ctx, uary) moge::gl::setUniformArrayD3D11(MOGE_GL_GET_CONTEXT(ctx), uary)
+#define MOGE_GL_SET_TEXTURE(ctx, tex) moge::gl::setTextureD3D11(MOGE_GL_GET_CONTEXT(ctx), tex)
+#define MOGE_GL_DRAW(ctx, topology, count, offset) moge::gl::drawD3D11(MOGE_GL_GET_CONTEXT(ctx), topology, count, offset)
 #endif
 
 struct moge::gl::Context::ContextImpl {
@@ -301,4 +317,43 @@ void moge::gl::destroyTexture(moge::gl::Context& ctx, moge::gl::Texture& tex) {
   MogeGLTexture* p = moge::gl::detail::getObject<MogeGLTexture>(ctx, tex);
   MOGE_GL_DESTROY_TEXTURE(*p);
   moge::gl::detail::removeHandle<MogeGLTexture>(ctx, tex);
+}
+
+void moge::gl::clear(moge::gl::Context& ctx, float R, float G, float B, float A) {
+  MOGE_ASSERT(ctx.pimpl);
+
+  MOGE_GL_CLEAR(ctx, R, G, B, A);
+}
+
+void moge::gl::present(moge::gl::Context& ctx) {
+  MOGE_ASSERT(ctx.pimpl);
+
+  MOGE_GL_PRESENT(ctx);
+}
+
+void moge::gl::setShader(moge::gl::Context& ctx, moge::gl::Shader& shdr) {
+  MOGE_ASSERT(ctx.pimpl);
+
+  MogeGLShader* p = moge::gl::detail::getObject<MogeGLShader>(ctx, shdr);
+  MOGE_GL_SET_SHADER(ctx, *p);
+}
+
+void moge::gl::setUniformArray(moge::gl::Context& ctx, moge::gl::UniformArray& uary) {
+  MOGE_ASSERT(ctx.pimpl);
+
+  MogeGLUniformArray* p = moge::gl::detail::getObject<MogeGLUniformArray>(ctx, uary);
+  MOGE_GL_SET_UNIFORM_ARRAY(ctx, *p);
+}
+
+void moge::gl::setTexture(moge::gl::Context& ctx, moge::gl::Texture& tex) {
+  MOGE_ASSERT(ctx.pimpl);
+
+  MogeGLTexture* p = moge::gl::detail::getObject<MogeGLTexture>(ctx, tex);
+  MOGE_GL_SET_TEXTURE(ctx, *p);
+}
+
+void moge::gl::draw(moge::gl::Context& ctx, enum MOGE_GL_DRAW_PRIMITIVE topology, uint32_t count, uint16_t offset) {
+  MOGE_ASSERT(ctx.pimpl);
+
+  MOGE_GL_DRAW(ctx, topology, count, offset);
 }
