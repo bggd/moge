@@ -107,7 +107,7 @@ struct ContextDesc {
   void* hwnd;
 };
 
-int getBackend();
+MOGE_GL_BACKEND getBackend();
 Context createContext(ContextDesc& desc);
 void destroyContext(Context& ctx);
 void resizeBackBuffer(Context& ctx);

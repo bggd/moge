@@ -166,7 +166,7 @@ void moge::gl::detail::removeHandle(moge::gl::Context& ctx, HandleType& handle) 
   pool->removeHandle(handle.handle);
 }
 
-int moge::gl::getBackend() {
+MOGE_GL_BACKEND moge::gl::getBackend() {
 #if defined(MOGE_USE_OPENGL)
   return MOGE_GL_BACKEND_OGL;
 #else
