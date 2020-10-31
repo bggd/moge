@@ -103,27 +103,28 @@ struct moge::gl::Context::ContextImpl {
   ResourcePool pool;
   MogeGLCtx ctx;
 
-  void getPool(moge::HandlePool<MogeGLShader>* out_pool);
-  void getPool(moge::HandlePool<MogeGLUniformArray>* out_pool);
-  void getPool(moge::HandlePool<MogeGLVBO>* out_pool);
-  void getPool(moge::HandlePool<MogeGLTexture>* out_pool);
+  template <typename ObjectType>
+  moge::HandlePool<ObjectType>* getPool() {
+    return NULL;
+  }
+
+  template <>
+  moge::HandlePool<MogeGLShader>* getPool() {
+    return &this->pool.shdr_pool;
+  }
+  template <>
+  moge::HandlePool<MogeGLUniformArray>* getPool() {
+    return &this->pool.uary_pool;
+  }
+  template <>
+  moge::HandlePool<MogeGLVBO>* getPool() {
+    return &this->pool.vbo_pool;
+  }
+  template <>
+  moge::HandlePool<MogeGLTexture>* getPool() {
+    return &this->pool.tex_pool;
+  }
 };
-
-void moge::gl::Context::ContextImpl::getPool(moge::HandlePool<MogeGLShader>* out_pool) {
-  out_pool = &this->pool.shdr_pool;
-}
-
-void moge::gl::Context::ContextImpl::getPool(moge::HandlePool<MogeGLUniformArray>* out_pool) {
-  out_pool = &this->pool.uary_pool;
-}
-
-void moge::gl::Context::ContextImpl::getPool(moge::HandlePool<MogeGLVBO>* out_pool) {
-  out_pool = &this->pool.vbo_pool;
-}
-
-void moge::gl::Context::ContextImpl::getPool(moge::HandlePool<MogeGLTexture>* out_pool) {
-  out_pool = &this->pool.tex_pool;
-}
 
 namespace moge {
 namespace gl {
@@ -144,24 +145,21 @@ void removeHandle(Context& ctx, HandleType& handle);
 
 template <typename HandleType, typename ObjectType>
 void moge::gl::detail::insertObject(moge::gl::Context& ctx, ObjectType& obj, HandleType& out) {
-  moge::HandlePool<ObjectType>* pool = NULL;
-  ctx.pimpl->getPool(pool);
+  moge::HandlePool<ObjectType>* pool = ctx.pimpl->getPool<ObjectType>();
   MOGE_ASSERT(pool);
   out.handle = pool->insertObject(obj);
 }
 
 template <typename ObjectType, typename HandleType>
 ObjectType* moge::gl::detail::getObject(moge::gl::Context& ctx, HandleType& handle) {
-  moge::HandlePool<ObjectType>* pool = NULL;
-  ctx.pimpl->getPool(pool);
+  moge::HandlePool<ObjectType>* pool = ctx.pimpl->getPool<ObjectType>();
   MOGE_ASSERT(pool);
   return pool->getObject(handle.handle);
 }
 
 template <typename ObjectType, typename HandleType>
 void moge::gl::detail::removeHandle(moge::gl::Context& ctx, HandleType& handle) {
-  moge::HandlePool<ObjectType>* pool = NULL;
-  ctx.pimpl->getPool(pool);
+  moge::HandlePool<ObjectType>* pool = ctx.pimpl->getPool<ObjectType>();
   MOGE_ASSERT(pool);
   pool->removeHandle(handle.handle);
 }
