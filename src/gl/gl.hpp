@@ -107,6 +107,7 @@ struct ContextDesc {
   void* hwnd;
 };
 
+void loadOGL(void* (*getProcAddress)(const char*));
 MOGE_GL_BACKEND getBackend();
 Context createContext(ContextDesc& desc);
 void destroyContext(Context& ctx);

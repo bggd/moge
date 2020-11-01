@@ -18,7 +18,7 @@
 #include "ogl/uniform_array.cpp"
 #include "ogl/vertex_buffer.cpp"
 #include "ogl/texture.cpp"
-#include "ogl/ogl.cpp"
+#include "ogl/gl.cpp"
 #elif defined(MOGE_USE_DIRECT3D11)
 #include "d3d11/context.hpp"
 #include "d3d11/shader.hpp"
@@ -59,7 +59,7 @@ typedef moge::gl::TextureOGL MogeGLTexture;
 #define MOGE_GL_CLEAR(ctx, r, g, b, a) moge::gl::clearOGL(MOGE_GL_GET_CONTEXT(ctx), r, g, b, a)
 #define MOGE_GL_PRESENT(ctx) moge::gl::presentOGL(MOGE_GL_GET_CONTEXT(ctx))
 #define MOGE_GL_SET_SHADER(ctx, shdr) moge::gl::setShaderOGL(MOGE_GL_GET_CONTEXT(ctx), shdr)
-#define MOGE_GL_SET_UNIFORM_ARRAY(ctx, uary) moge::gl::setUniformArrayOGL(MOGE_GL_GET_CONTEXT(ctx), shdr)
+#define MOGE_GL_SET_UNIFORM_ARRAY(ctx, uary) moge::gl::setUniformArrayOGL(MOGE_GL_GET_CONTEXT(ctx), uary)
 #define MOGE_GL_SET_TEXTURE(ctx, tex) moge::gl::setTextureOGL(MOGE_GL_GET_CONTEXT(ctx), tex)
 #define MOGE_GL_SET_VERTEX_BUFFER(ctx, vbo) moge::gl::setVertexBufferOGL(MOGE_GL_GET_CONTEXT(ctx), vbo)
 #define MOGE_GL_DRAW(ctx, topology, count, offset) moge::gl::drawOGL(MOGE_GL_GET_CONTEXT(ctx), topology, count, offset)
@@ -162,6 +162,12 @@ void moge::gl::detail::removeHandle(moge::gl::Context& ctx, HandleType& handle) 
   moge::HandlePool<ObjectType>* pool = ctx.pimpl->getPool<ObjectType>();
   MOGE_ASSERT(pool);
   pool->removeHandle(handle.handle);
+}
+
+void moge::gl::loadOGL(void* (*getProcAddress)(const char*)) {
+#if defined(MOGE_USE_OPENGL)
+  moge::gl::load_opengl_functions(getProcAddress);
+#endif
 }
 
 MOGE_GL_BACKEND moge::gl::getBackend() {
