@@ -105,9 +105,9 @@ struct ContextDesc {
   uint32_t maxVertexBuffers;
   uint32_t maxTextures;
   void* hwnd;
+  void* (*getProcAddress)(const char*);
 };
 
-void loadOGL(void* (*getProcAddress)(const char*));
 MOGE_GL_BACKEND getBackend();
 Context createContext(ContextDesc& desc);
 void destroyContext(Context& ctx);

@@ -164,12 +164,6 @@ void moge::gl::detail::removeHandle(moge::gl::Context& ctx, HandleType& handle) 
   pool->removeHandle(handle.handle);
 }
 
-void moge::gl::loadOGL(void* (*getProcAddress)(const char*)) {
-#if defined(MOGE_USE_OPENGL)
-  moge::gl::load_opengl_functions(getProcAddress);
-#endif
-}
-
 MOGE_GL_BACKEND moge::gl::getBackend() {
 #if defined(MOGE_USE_OPENGL)
   return MOGE_GL_BACKEND_OGL;
@@ -205,6 +199,13 @@ moge::gl::Context moge::gl::createContext(moge::gl::ContextDesc& desc) {
   glctx.hwnd = static_cast<HWND>(desc.hwnd);
 #else
   MOGE_ASSERT(desc.hwnd == NULL);
+#endif
+
+#if defined(MOGE_USE_OPENGL)
+  MOGE_ASSERT(desc.getProcAddress);
+  moge::gl::load_opengl_functions(desc.getProcAddress);
+#else
+  MOGE_ASSERT(desc.getProcAddress == NULL);
 #endif
 
   ctx.pimpl->ctx = glctx;
