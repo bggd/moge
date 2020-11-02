@@ -8,6 +8,11 @@
 #define MOGE_GL_INPUT_ELEMENT_MAX (8)
 #endif
 
+extern "C" {
+  typedef void* (*getProcAddressFuncPtr)(const char*);
+  void MogeLoadOGL(getProcAddressFuncPtr getProcAddress);
+}
+
 enum MOGE_GL_BACKEND {
   MOGE_GL_BACKEND_UNDEFINED = 0,
   MOGE_GL_BACKEND_D3D11,
@@ -105,7 +110,6 @@ struct ContextDesc {
   uint32_t maxVertexBuffers;
   uint32_t maxTextures;
   void* hwnd;
-  void* (*getProcAddress)(const char*);
 };
 
 MOGE_GL_BACKEND getBackend();
