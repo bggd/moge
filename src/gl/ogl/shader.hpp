@@ -9,6 +9,9 @@ namespace gl {
 
 struct ShaderOGL {
   uint32_t id;
+  uint32_t numInput;
+  uint32_t stride;
+  InputLayout inputArray[MOGE_GL_INPUT_ELEMENT_MAX];
 };
 
 void createShaderOGL(ContextOGL& ctx, ShaderOGL& shdr, ShaderDesc& desc);

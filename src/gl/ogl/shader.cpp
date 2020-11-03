@@ -3,18 +3,30 @@
 
 void moge::gl::createShaderOGL(ContextOGL&, ShaderOGL& shdr, ShaderDesc& desc) {
   MOGE_ASSERT(!shdr.id);
+  MOGE_ASSERT(!shdr.numInput);
+  MOGE_ASSERT(!shdr.stride);
 
   GLuint id;
   MOGE_GL_CHECK(id = glCreateProgram());
   MOGE_ASSERT(id);
+
+  shdr.numInput = desc.numInput;
+
+  uint32_t stride = 0;
 
   for (uint32_t i = 0; i < desc.numInput; ++i) {
     MOGE_ASSERT(desc.inputArray[i].glslAttributeName);
     MOGE_ASSERT(desc.inputArray[i].numFloat > 0);
     MOGE_ASSERT(desc.inputArray[i].numFloat < 5);
 
+    shdr.inputArray[i].glslAttributeLocation = desc.inputArray[i].glslAttributeLocation;
+    shdr.inputArray[i].numFloat = desc.inputArray[i].numFloat;
+    stride += desc.inputArray[i].numFloat;
+
     MOGE_GL_CHECK(glBindAttribLocation(id, desc.inputArray[i].glslAttributeLocation, desc.inputArray[i].glslAttributeName));
   }
+
+  shdr.stride = stride;
 
   GLuint vs, fs;
   MOGE_GL_CHECK(vs = glCreateShader(GL_VERTEX_SHADER));
@@ -56,4 +68,10 @@ void moge::gl::destroyShaderOGL(moge::gl::ShaderOGL& shdr) {
   MOGE_GL_CHECK(glDeleteProgram(shdr.id));
 
   shdr.id = 0;
+  for (uint32_t i = 0; i < MOGE_GL_INPUT_ELEMENT_MAX; ++i) {
+    moge::gl::InputLayout input = {};
+    shdr.inputArray[i] = input;
+  }
+  shdr.numInput = 0;
+  shdr.stride = 0;
 }

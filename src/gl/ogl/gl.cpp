@@ -12,6 +12,16 @@ void moge::gl::presentOGL(moge::gl::ContextOGL&) {
 void moge::gl::setShaderOGL(moge::gl::ContextOGL&, moge::gl::ShaderOGL& shdr) {
   MOGE_ASSERT(shdr.id);
 
+  uint32_t index = 0;
+  for (uint32_t i = 0; i < shdr.numInput; ++i) {
+    GLuint loc = shdr.inputArray[i].glslAttributeLocation;
+    GLint size = shdr.inputArray[i].numFloat;
+    GLsizei stride = sizeof(GLfloat) * shdr.stride;
+    MOGE_GL_CHECK(glEnableVertexAttribArray(loc));
+    MOGE_GL_CHECK(glVertexAttribPointer(loc, size, GL_FLOAT, GL_FALSE, stride, (const GLvoid*)(sizeof(GLfloat) * index)));
+    index += size;
+  }
+
   MOGE_GL_CHECK(glUseProgram(shdr.id));
 }
 
