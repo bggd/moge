@@ -7,7 +7,7 @@
 #define MOGE_OGL_DEF(ret, name, ...) ret (*gl##name)(__VA_ARGS__) = NULL;
 
 MOGE_OGL_GLES2
-//MOGE_OGL_VAO
+MOGE_OGL_VAO
 
 #undef MOGE_OGL_DEF
 #define MOGE_OGL_DEF(ret, name, ...)                   \
@@ -21,17 +21,17 @@ static bool moge_gl_load_ogl_gles2(MogeGLGetFunc getproc) {
   return true;
 }
 
-//static bool moge_gl_load_ogl_vao(MogeGLGetFunc getproc) {
-//  MOGE_OGL_VAO
-//  return true;
-//}
+static bool moge_gl_load_ogl_vao(MogeGLGetFunc getproc) {
+  MOGE_OGL_VAO
+  return true;
+}
 
 void moge::gl::load_opengl_functions(MogeGLGetFunc getproc) {
   bool ok;
   ok = moge_gl_load_ogl_gles2(getproc);
   MOGE_ASSERT(ok);
-  //ok = moge_gl_load_ogl_vao(getproc);
-  //MOGE_ASSERT(ok);
+  ok = moge_gl_load_ogl_vao(getproc);
+  MOGE_ASSERT(ok);
 }
 
 static const char* opengl_err2str(GLenum err)
