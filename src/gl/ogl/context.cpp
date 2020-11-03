@@ -13,6 +13,7 @@ void moge::gl::createContextOGL(moge::gl::ContextOGL& ctx) {
 
 void moge::gl::destroyContextOGL(moge::gl::ContextOGL& ctx) {
   MOGE_ASSERT(ctx.VAO);
+  ctx.VAO = 0;
 }
 
 void moge::gl::resizeBackBufferOGL(ContextOGL&) {
