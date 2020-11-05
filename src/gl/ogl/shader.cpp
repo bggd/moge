@@ -5,6 +5,7 @@ void moge::gl::createShaderOGL(ContextOGL&, ShaderOGL& shdr, ShaderDesc& desc) {
   MOGE_ASSERT(!shdr.id);
   MOGE_ASSERT(!shdr.numInput);
   MOGE_ASSERT(!shdr.stride);
+  MOGE_ASSERT(desc.numInput < MOGE_GL_INPUT_ELEMENT_MAX);
 
   GLuint id;
   MOGE_GL_CHECK(id = glCreateProgram());
