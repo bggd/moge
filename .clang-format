@@ -1,5 +1,5 @@
 BasedOnStyle: LLVM
-Standard: Cpp11
+Standard: c++03
 PointerAlignment: Left
 ColumnLimit: 0
 AllowShortBlocksOnASingleLine: true

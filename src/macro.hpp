@@ -1,3 +1,5 @@
+// clang-format off
+
 #ifndef MOGE_DEBUG
 #ifndef NDEBUG
 #define MOGE_DEBUG (1)
@@ -24,3 +26,5 @@
   #include <stdlib.h>
   #define MOGE_FREE(ptr) free(ptr)
 #endif // MOGE_FREE
+
+// clang-format on
