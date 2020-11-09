@@ -37,3 +37,4 @@ build
 googletest
 compile_flags.txt
 tags
+compile_commands.json
